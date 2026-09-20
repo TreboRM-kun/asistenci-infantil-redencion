@@ -447,6 +447,27 @@
     </div>
   </div>
 
+    <div id="modalNombreNino" class="modal oculto">
+  <div class="ventana-usuarios">
+    <button class="cerrar-modal" onclick="cerrarModal('modalNombreNino')">×</button>
+
+    <h2>Modificar nombre del niño</h2>
+    <p id="nombreNinoCambioTexto"></p>
+
+    <input id="nombreNinoModal"
+      type="text"
+      placeholder="Nombre completo del niño">
+
+    <button onclick="guardarNombreNino()">
+      Guardar nombre
+    </button>
+
+    <button onclick="cerrarModal('modalNombreNino')">
+      Cancelar
+    </button>
+  </div>
+</div>
+
     <div id="modalContrasena" class="modal oculto">
   <div class="ventana-usuarios">
     <button class="cerrar-modal" onclick="cerrarModal('modalContrasena')">×</button>
@@ -568,6 +589,12 @@
       localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
     }
 
+    function ordenarNinos(salon) {
+      ninos[salon].sort((a, b) =>
+        a.localeCompare(b, "es", { sensitivity: "base" })
+      );
+    }
+
         const maestrosIniciales = {
       Semillas: "",
       Plantas: "",
@@ -671,6 +698,9 @@
       mostrarMaestroSalon();
 
       if (!usuarioActual || !ninos[salon]) return;
+
+      ordenarNinos(salon);
+      guardarNinos();
 
       const puedeModificar =
         usuarioActual.rol === "Maestro" ||
@@ -797,6 +827,7 @@
       }
 
       ninos[salonNuevo].push(nombre);
+      ordenarNinos(salonNuevo);
       guardarNinos();
 
       document.getElementById("nombreNino").value = "";
@@ -937,6 +968,8 @@ function crearUsuario() {
   abrirAdministrarUsuarios();
 }
 
+let ninoPendiente = null;
+
     function editarNino(salon, indice) {
       if (usuarioActual.rol !== "Administrador") {
         return;
@@ -944,24 +977,32 @@ function crearUsuario() {
 
       const nombreAnterior = ninos[salon][indice];
 
-      const nuevoNombre = prompt(
-        "Modifique el nombre del niño:",
-        nombreAnterior
-      );
+      ninoPendiente = { salon, indice };
 
-      if (nuevoNombre === null) {
+      document.getElementById("nombreNinoCambioTexto").textContent =
+        `Nombre actual: ${nombreAnterior}`;
+      document.getElementById("nombreNinoModal").value = nombreAnterior;
+      document.getElementById("modalNombreNino").classList.remove("oculto");
+    }
+
+    function guardarNombreNino() {
+      if (!ninoPendiente) {
         return;
       }
 
-      const nombreLimpio = nuevoNombre.trim();
+      const nuevoNombre = document.getElementById("nombreNinoModal")
+        .value.trim();
 
-      if (!nombreLimpio) {
+      if (!nuevoNombre) {
         alert("El nombre no puede estar vacío.");
         return;
       }
 
-      ninos[salon][indice] = nombreLimpio;
+      ninos[ninoPendiente.salon][ninoPendiente.indice] = nuevoNombre;
+      ordenarNinos(ninoPendiente.salon);
       guardarNinos();
+      cerrarModal("modalNombreNino");
+      ninoPendiente = null;
       mostrarAsistencia();
     }
 
