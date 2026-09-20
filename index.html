@@ -513,6 +513,135 @@
   </section>
 
   <script>
+const API_SHEETDB = "https://sheetdb.io/api/v1/s59gx2k1cndbn";
+const HOJAS = {
+  ninos: "Niños",
+  usuarios: "Usuarios",
+  asistencias: "Asistencias",
+  maestros: "Maestros"
+};
+
+async function leerHoja(nombreHoja) {
+  const respuesta = await fetch(
+    `${API_SHEETDB}?sheet=${encodeURIComponent(nombreHoja)}`
+  );
+
+  if (!respuesta.ok) {
+    throw new Error(`No se pudo leer la hoja ${nombreHoja}.`);
+  }
+
+  return respuesta.json();
+}
+
+async function reemplazarHoja(nombreHoja, filas) {
+  const parametros = `?sheet=${encodeURIComponent(nombreHoja)}`;
+
+  const borrar = await fetch(`${API_SHEETDB}/all${parametros}`, {
+    method: "DELETE"
+  });
+
+  if (!borrar.ok) {
+    throw new Error(`No se pudo preparar la hoja ${nombreHoja}.`);
+  }
+
+  if (filas.length === 0) {
+    return;
+  }
+
+  const guardar = await fetch(`${API_SHEETDB}${parametros}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ data: filas })
+  });
+
+  if (!guardar.ok) {
+    throw new Error(`No se pudo guardar la hoja ${nombreHoja}.`);
+  }
+}
+
+function sincronizarHoja(nombreHoja, filas) {
+  reemplazarHoja(nombreHoja, filas).catch(error => {
+    console.error(error);
+  });
+}
+
+function filasDeNinos() {
+  return Object.entries(ninos).flatMap(([salon, nombres]) =>
+    nombres.map(nombre => ({ Nombre: nombre, Salon: salon }))
+  );
+}
+
+function filasDeUsuarios() {
+  return Object.entries(usuarios).map(([usuario, datos]) => ({
+    Usuario: usuario,
+    Contrasena: datos.contrasena,
+    Rol: datos.rol,
+    Salon: datos.salon
+  }));
+}
+
+async function cargarDatosDesdeAPI() {
+  try {
+    const [filasNinos, filasUsuarios, filasAsistencias, filasMaestros] =
+      await Promise.all([
+        leerHoja(HOJAS.ninos),
+        leerHoja(HOJAS.usuarios),
+        leerHoja(HOJAS.asistencias),
+        leerHoja(HOJAS.maestros)
+      ]);
+
+    if (filasNinos.length) {
+      ninos = { Semillas: [], Plantas: [], Arboles: [] };
+      filasNinos.forEach(fila => {
+        if (ninos[fila.Salon]) {
+          ninos[fila.Salon].push(fila.Nombre);
+        }
+      });
+      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
+    } else {
+      sincronizarHoja(HOJAS.ninos, filasDeNinos());
+    }
+
+    if (filasUsuarios.length) {
+      usuarios = {};
+      filasUsuarios.forEach(fila => {
+        usuarios[fila.Usuario] = {
+          contrasena: fila.Contrasena,
+          rol: fila.Rol,
+          salon: fila.Salon
+        };
+      });
+      localStorage.setItem("usuariosRedencion", JSON.stringify(usuarios));
+    } else {
+      sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
+    }
+
+    if (filasMaestros.length) {
+      maestrosSalon = { Semillas: "", Plantas: "", Arboles: "" };
+      filasMaestros.forEach(fila => {
+        if (maestrosSalon[fila.Salon] !== undefined) {
+          maestrosSalon[fila.Salon] = fila.Maestros || "";
+        }
+      });
+      localStorage.setItem(
+        "maestrosSalonRedencion",
+        JSON.stringify(maestrosSalon)
+      );
+    } else {
+      sincronizarHoja(
+        HOJAS.maestros,
+        Object.entries(maestrosSalon).map(([salon, maestros]) => ({
+          Salon: salon,
+          Maestros: maestros
+        }))
+      );
+    }
+  } catch (error) {
+    console.error("SheetDB no está disponible. Se usará la copia local.", error);
+  }
+}
 
     const usuariosIniciales = {
       Sembrador: {
@@ -583,10 +712,13 @@
           iniciarSesion();
         }
       });
+
+      cargarDatosDesdeAPI();
     });
 
     function guardarNinos() {
       localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
+      sincronizarHoja(HOJAS.ninos, filasDeNinos());
     }
 
     function ordenarNinos(salon) {
@@ -619,6 +751,14 @@
         "maestrosSalonRedencion",
         JSON.stringify(maestrosSalon)
       );
+
+      sincronizarHoja(
+        HOJAS.maestros,
+        Object.entries(maestrosSalon).map(([nombreSalon, maestros]) => ({
+          Salon: nombreSalon,
+          Maestros: maestros
+        }))
+      );
     }
     
     function mostrarMaestroSalon() {
@@ -635,6 +775,7 @@
 
     function guardarUsuarios() {
       localStorage.setItem("usuariosRedencion", JSON.stringify(usuarios));
+      sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
     }
 
     function escaparTexto(texto) {
@@ -854,6 +995,24 @@
     function guardarAsistencia() {
       const salon = document.getElementById("salon").value;
       const fecha = document.getElementById("fecha").value;
+      const filasAsistencia = ninos[salon].map((nombre, indice) => {
+        const id = `${salon}-${indice}-${fecha}`;
+
+        return {
+          Fecha: fecha,
+          Salon: salon,
+          Nombre: nombre,
+          Asistencia: document.getElementById(`asistencia-${id}`).checked
+            ? "Sí"
+            : "No",
+          Comportamiento: document.getElementById(`comportamiento-${id}`).value,
+          Participacion: document.getElementById(`participacion-${id}`).value,
+          Desarrollo: document.getElementById(`desarrollo-${id}`).value,
+          Observaciones: document.getElementById(`observaciones-${id}`).value
+        };
+      });
+
+      sincronizarAsistencias(fecha, salon, filasAsistencia);
 
       localStorage.setItem(
         `asistencia-${salon}-${fecha}`,
@@ -863,11 +1022,28 @@
       alert("Asistencia guardada correctamente en este navegador.");
     }
 
+    async function sincronizarAsistencias(fecha, salon, filasNuevas) {
+      try {
+        const filasActuales = await leerHoja(HOJAS.asistencias);
+        const restantes = filasActuales.filter(fila =>
+          fila.Fecha !== fecha || fila.Salon !== salon
+        );
+
+        await reemplazarHoja(
+          HOJAS.asistencias,
+          restantes.concat(filasNuevas)
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     function guardarUsuarios() {
   localStorage.setItem(
     "usuariosRedencion",
     JSON.stringify(usuarios)
   );
+  sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
 }
 
     function mostrarPanelUsuarios() {
