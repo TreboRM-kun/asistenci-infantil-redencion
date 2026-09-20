@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asistencias - Iglesia Infantil Redención</title>
+  <link rel="icon" type="image/png" href="src/img/lg.png">
 
   <style>
     * {
@@ -487,6 +488,8 @@
 
 <div id="modalConfirmacion" class="modal oculto">
   <div class="ventana-usuarios">
+    <button class="cerrar-modal" onclick="cerrarModal('modalConfirmacion')">×</button>
+
     <h2>Confirmar eliminación</h2>
     <p id="textoConfirmacion"></p>
 
@@ -495,6 +498,23 @@
     </button>
 
     <button onclick="cerrarModal('modalConfirmacion')">
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<div id="modalConfirmacionNino" class="modal oculto">
+  <div class="ventana-usuarios">
+    <button class="cerrar-modal" onclick="cerrarModal('modalConfirmacionNino')">×</button>
+
+    <h2>Confirmar eliminación</h2>
+    <p id="textoConfirmacionNino"></p>
+
+    <button class="boton-rojo" onclick="eliminarNinoConfirmado()">
+      Sí, eliminar
+    </button>
+
+    <button onclick="cerrarModal('modalConfirmacionNino')">
       Cancelar
     </button>
   </div>
@@ -983,12 +1003,23 @@ async function cargarDatosDesdeAPI() {
     function eliminarNino(salon, indice) {
       const nombre = ninos[salon][indice];
 
-      if (!confirm(`¿Desea eliminar a ${nombre}?`)) {
+      ninoEliminacionPendiente = { salon, indice };
+      document.getElementById("textoConfirmacionNino").textContent =
+        `¿Está seguro de eliminar a ${nombre}?`;
+      document.getElementById("modalConfirmacionNino")
+        .classList.remove("oculto");
+    }
+
+    function eliminarNinoConfirmado() {
+      if (!ninoEliminacionPendiente) {
         return;
       }
 
+      const { salon, indice } = ninoEliminacionPendiente;
       ninos[salon].splice(indice, 1);
       guardarNinos();
+      ninoEliminacionPendiente = null;
+      cerrarModal("modalConfirmacionNino");
       mostrarAsistencia();
     }
 
@@ -1183,6 +1214,7 @@ let ninoPendiente = null;
     }
 
 let usuarioPendiente = null;
+let ninoEliminacionPendiente = null;
 
 function abrirCambioContrasena() {
   const usuario = document.getElementById("usuarioSeleccionado").value;
