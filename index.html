@@ -628,8 +628,38 @@
 </div>
   </section>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      set
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyClKWjDf8mRbVUeZZfyw3rCxm1DdMy6oKY",
+      authDomain: "asistencia-infantil-redencion.firebaseapp.com",
+      databaseURL: "https://asistencia-infantil-redencion-default-rtdb.firebaseio.com",
+      projectId: "asistencia-infantil-redencion",
+      storageBucket: "asistencia-infantil-redencion.firebasestorage.app",
+      messagingSenderId: "599966273596",
+      appId: "1:599966273596:web:1f546f56932ba50a827339",
+      measurementId: "G-6G93GPZTL6"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    const firebaseDatabase = getDatabase(firebaseApp);
+
+    window.firebaseReady = Promise.resolve({
+      database: firebaseDatabase,
+      ref,
+      get,
+      set
+    });
+  </script>
+
   <script>
-const API_SHEETDB = "https://sheetdb.io/api/v1/s59gx2k1cndbn";
 const HOJAS = {
   ninos: "Niños",
   usuarios: "Usuarios",
@@ -638,43 +668,20 @@ const HOJAS = {
 };
 
 async function leerHoja(nombreHoja) {
-  const respuesta = await fetch(
-    `${API_SHEETDB}?sheet=${encodeURIComponent(nombreHoja)}`
+  const firebase = await window.firebaseReady;
+  const resultado = await firebase.get(
+    firebase.ref(firebase.database, nombreHoja)
   );
 
-  if (!respuesta.ok) {
-    throw new Error(`No se pudo leer la hoja ${nombreHoja}.`);
-  }
-
-  return respuesta.json();
+  return resultado.exists() ? Object.values(resultado.val()) : [];
 }
 
 async function reemplazarHoja(nombreHoja, filas) {
-  const parametros = `?sheet=${encodeURIComponent(nombreHoja)}`;
-
-  const borrar = await fetch(`${API_SHEETDB}/all${parametros}`, {
-    method: "DELETE"
-  });
-
-  if (!borrar.ok) {
-    throw new Error(`No se pudo preparar la hoja ${nombreHoja}.`);
-  }
-
-  if (filas.length === 0) {
-    return;
-  }
-
-  const guardar = await fetch(`${API_SHEETDB}${parametros}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ data: filas })
-  });
-
-  if (!guardar.ok) {
-    throw new Error(`No se pudo guardar la hoja ${nombreHoja}.`);
-  }
+  const firebase = await window.firebaseReady;
+  await firebase.set(
+    firebase.ref(firebase.database, nombreHoja),
+    filas
+  );
 }
 
 function sincronizarHoja(nombreHoja, filas) {
@@ -763,7 +770,7 @@ async function cargarDatosDesdeAPI() {
       );
     }
   } catch (error) {
-    console.error("SheetDB no está disponible. Se usará la copia local.", error);
+    console.error("Firebase no está disponible. Se usará la copia local.", error);
   }
 }
 
