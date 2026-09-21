@@ -638,6 +638,14 @@ async function cargarDatosDesdeAPI() {
       sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
     }
 
+    if (filasAsistencias.length) {
+      asistencias = filasAsistencias;
+      localStorage.setItem(
+        "asistenciasRedencion",
+        JSON.stringify(asistencias)
+      );
+    }
+
     if (filasMaestros.length) {
       maestrosSalon = { Semillas: "", Plantas: "", Arboles: "" };
       filasMaestros.forEach(fila => {
@@ -712,6 +720,10 @@ async function cargarDatosDesdeAPI() {
       ninos = ninosIniciales;
       guardarNinos();
     }
+
+    let asistencias = JSON.parse(
+      localStorage.getItem("asistenciasRedencion")
+    ) || [];
 
     let usuarioActual = null;
 
@@ -807,6 +819,14 @@ async function cargarDatosDesdeAPI() {
         .replaceAll("'", "&#039;");
     }
 
+    function obtenerAsistencia(salon, fecha, nombre) {
+      return asistencias.find(fila =>
+        String(fila.Salon) === salon &&
+        String(fila.Fecha) === fecha &&
+        String(fila.Nombre) === nombre
+      );
+    }
+
     function iniciarSesion() {
       const usuario = document.getElementById("usuario").value.trim();
       const contrasena = document.getElementById("contrasena").value;
@@ -889,6 +909,7 @@ async function cargarDatosDesdeAPI() {
 
       ninos[salon].forEach((nino, indice) => {
         const id = `${salon}-${indice}-${fecha}`;
+        const asistenciaGuardada = obtenerAsistencia(salon, fecha, nino);
 
         html += `
           <tr>
@@ -896,41 +917,42 @@ async function cargarDatosDesdeAPI() {
 
             <td>
               <input id="asistencia-${id}" type="checkbox"
+                ${asistenciaGuardada?.Asistencia === "Sí" ? "checked" : ""}
                 ${puedeModificar ? "" : "disabled"}>
             </td>
 
             <td>
               <select id="comportamiento-${id}"
                 ${puedeModificar ? "" : "disabled"}>
-                <option>Excelente</option>
-                <option>Bueno</option>
-                <option>Regular</option>
-                <option>Necesita apoyo</option>
+                <option ${asistenciaGuardada?.Comportamiento === "Excelente" ? "selected" : ""}>Excelente</option>
+                <option ${asistenciaGuardada?.Comportamiento === "Bueno" ? "selected" : ""}>Bueno</option>
+                <option ${asistenciaGuardada?.Comportamiento === "Regular" ? "selected" : ""}>Regular</option>
+                <option ${asistenciaGuardada?.Comportamiento === "Necesita apoyo" ? "selected" : ""}>Necesita apoyo</option>
               </select>
             </td>
 
             <td>
               <select id="participacion-${id}"
                 ${puedeModificar ? "" : "disabled"}>
-                <option>Alta</option>
-                <option>Media</option>
-                <option>Baja</option>
+                <option ${asistenciaGuardada?.Participacion === "Alta" ? "selected" : ""}>Alta</option>
+                <option ${asistenciaGuardada?.Participacion === "Media" ? "selected" : ""}>Media</option>
+                <option ${asistenciaGuardada?.Participacion === "Baja" ? "selected" : ""}>Baja</option>
               </select>
             </td>
 
             <td>
               <select id="desarrollo-${id}"
                 ${puedeModificar ? "" : "disabled"}>
-                <option>Excelente</option>
-                <option>Bueno</option>
-                <option>En proceso</option>
+                <option ${asistenciaGuardada?.Desarrollo === "Excelente" ? "selected" : ""}>Excelente</option>
+                <option ${asistenciaGuardada?.Desarrollo === "Bueno" ? "selected" : ""}>Bueno</option>
+                <option ${asistenciaGuardada?.Desarrollo === "En proceso" ? "selected" : ""}>En proceso</option>
               </select>
             </td>
 
             <td>
               <textarea id="observaciones-${id}"
                 ${puedeModificar ? "" : "disabled"}
-                placeholder="Observaciones"></textarea>
+                placeholder="Observaciones">${escaparTexto(asistenciaGuardada?.Observaciones || "")}</textarea>
             </td>
 
             ${puedeEliminar ? `
@@ -1023,7 +1045,7 @@ async function cargarDatosDesdeAPI() {
       mostrarAsistencia();
     }
 
-    function guardarAsistencia() {
+    async function guardarAsistencia() {
       const salon = document.getElementById("salon").value;
       const fecha = document.getElementById("fecha").value;
       const filasAsistencia = ninos[salon].map((nombre, indice) => {
@@ -1043,14 +1065,26 @@ async function cargarDatosDesdeAPI() {
         };
       });
 
-      sincronizarAsistencias(fecha, salon, filasAsistencia);
-
+      asistencias = asistencias.filter(fila =>
+        String(fila.Fecha) !== fecha || String(fila.Salon) !== salon
+      );
+      asistencias.push(...filasAsistencia);
       localStorage.setItem(
-        `asistencia-${salon}-${fecha}`,
-        document.getElementById("tablaAsistencia").innerHTML
+        "asistenciasRedencion",
+        JSON.stringify(asistencias)
       );
 
-      alert("Asistencia guardada correctamente en este navegador.");
+      const sincronizada = await sincronizarAsistencias(
+        fecha,
+        salon,
+        filasAsistencia
+      );
+
+      mostrarExito(
+        sincronizada
+          ? "Asistencia guardada correctamente."
+          : "Asistencia guardada en este navegador, pero no se pudo sincronizar en línea."
+      );
     }
 
     async function sincronizarAsistencias(fecha, salon, filasNuevas) {
@@ -1064,8 +1098,10 @@ async function cargarDatosDesdeAPI() {
           HOJAS.asistencias,
           restantes.concat(filasNuevas)
         );
+        return true;
       } catch (error) {
         console.error(error);
+        return false;
       }
     }
 
