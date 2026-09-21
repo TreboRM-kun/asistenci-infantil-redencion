@@ -367,7 +367,7 @@
     </select>
 
     <label for="fecha">Fecha:</label>
-    <input id="fecha" type="date" onchange="mostrarAsistencia()">
+    <input id="fecha" type="date" min="1970-01-04" step="7" onchange="validarFechaDomingo()">
 
     <label for="maestrosSalon">Maestros:</label>
     <input
@@ -729,7 +729,7 @@ async function cargarDatosDesdeAPI() {
 
     document.addEventListener("DOMContentLoaded", () => {
       const fecha = document.getElementById("fecha");
-      fecha.value = new Date().toISOString().split("T")[0];
+      fecha.value = obtenerDomingoAnterior();
 
       document.getElementById("usuario").addEventListener("keydown", evento => {
         if (evento.key === "Enter") {
@@ -747,6 +747,36 @@ async function cargarDatosDesdeAPI() {
 
       cargarDatosDesdeAPI();
     });
+
+    function obtenerDomingoAnterior(fechaTexto) {
+      const fecha = fechaTexto
+        ? new Date(`${fechaTexto}T00:00:00`)
+        : new Date();
+
+      fecha.setHours(0, 0, 0, 0);
+      fecha.setDate(fecha.getDate() - fecha.getDay());
+
+      return [
+        fecha.getFullYear(),
+        String(fecha.getMonth() + 1).padStart(2, "0"),
+        String(fecha.getDate()).padStart(2, "0")
+      ].join("-");
+    }
+
+    function esDomingo(fechaTexto) {
+      return fechaTexto && new Date(`${fechaTexto}T00:00:00`).getDay() === 0;
+    }
+
+    function validarFechaDomingo() {
+      const campoFecha = document.getElementById("fecha");
+
+      if (!esDomingo(campoFecha.value)) {
+        alert("Las asistencias solo pueden registrarse para un domingo.");
+        campoFecha.value = obtenerDomingoAnterior(campoFecha.value);
+      }
+
+      mostrarAsistencia();
+    }
 
     function guardarNinos() {
       localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
@@ -1048,6 +1078,12 @@ async function cargarDatosDesdeAPI() {
     async function guardarAsistencia() {
       const salon = document.getElementById("salon").value;
       const fecha = document.getElementById("fecha").value;
+
+      if (!esDomingo(fecha)) {
+        alert("No se puede guardar la asistencia: seleccione un domingo.");
+        return;
+      }
+
       const filasAsistencia = ninos[salon].map((nombre, indice) => {
         const id = `${salon}-${indice}-${fecha}`;
 
