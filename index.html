@@ -241,6 +241,59 @@
   color: #16803c;
 }
 
+.ventana-resumen {
+  max-width: 850px;
+}
+
+.filtros-resumen {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+  text-align: left;
+}
+
+.filtros-resumen label {
+  font-weight: bold;
+}
+
+.resumen-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.resumen-dato {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.resumen-dato strong {
+  display: block;
+  color: #174ea6;
+  font-size: 20px;
+}
+
+.tabla-resumen {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.tabla-resumen th,
+.tabla-resumen td {
+  padding: 8px;
+}
+
+@media (max-width: 600px) {
+  .filtros-resumen,
+  .resumen-datos {
+    grid-template-columns: 1fr;
+  }
+}
+
 .ventana-usuarios input,
 .ventana-usuarios select {
   display: block;
@@ -353,6 +406,12 @@
           Administrar usuarios
         </button>
 
+        <button id="botonResumenNino"
+          class="oculto"
+          onclick="abrirResumenNino()">
+          Resumen del niño
+        </button>
+
         <button onclick="cerrarSesion()">Cerrar sesión</button>
       </div>
     </div>
@@ -445,6 +504,43 @@
       <button onclick="crearUsuario()">Crear usuario</button>
 
       <p id="mensajeUsuarios"></p>
+    </div>
+  </div>
+
+  <div id="modalResumenNino" class="modal oculto">
+    <div class="ventana-usuarios ventana-resumen">
+      <button class="cerrar-modal" onclick="cerrarResumenNino()">×</button>
+
+      <h2>Resumen del niño</h2>
+
+      <div class="filtros-resumen">
+        <div>
+          <label for="resumenSalon">Salón:</label>
+          <select id="resumenSalon" onchange="cargarNinosResumen()">
+            <option value="Semillas">Semillas</option>
+            <option value="Plantas">Plantas</option>
+            <option value="Arboles">Árboles</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="resumenNino">Niño:</label>
+          <select id="resumenNino"></select>
+        </div>
+
+        <div>
+          <label for="resumenDesde">Desde:</label>
+          <input id="resumenDesde" type="date" min="1970-01-04" step="7">
+        </div>
+
+        <div>
+          <label for="resumenHasta">Hasta:</label>
+          <input id="resumenHasta" type="date" min="1970-01-04" step="7">
+        </div>
+      </div>
+
+      <button onclick="mostrarResumenNino()">Consultar resumen</button>
+      <div id="contenidoResumenNino"></div>
     </div>
   </div>
 
@@ -1151,12 +1247,188 @@ async function cargarDatosDesdeAPI() {
 
     function mostrarPanelUsuarios() {
   const boton = document.getElementById("botonAdministrarUsuarios");
+  const botonResumen = document.getElementById("botonResumenNino");
 
   if (usuarioActual && usuarioActual.rol === "Administrador") {
     boton.classList.remove("oculto");
   } else {
     boton.classList.add("oculto");
   }
+
+  if (usuarioActual &&
+      (usuarioActual.rol === "Supervisor" ||
+       usuarioActual.rol === "Administrador")) {
+    botonResumen.classList.remove("oculto");
+  } else {
+    botonResumen.classList.add("oculto");
+  }
+}
+
+    function cargarNinosResumen() {
+  const salon = document.getElementById("resumenSalon").value;
+  const selectorNino = document.getElementById("resumenNino");
+
+  selectorNino.innerHTML = ninos[salon]
+    .map(nino => `
+      <option value="${escaparTexto(nino)}">${escaparTexto(nino)}</option>
+    `)
+    .join("");
+}
+
+    function abrirResumenNino() {
+  if (!usuarioActual ||
+      (usuarioActual.rol !== "Supervisor" &&
+       usuarioActual.rol !== "Administrador")) {
+    return;
+  }
+
+  const salon = usuarioActual.salon === "todos"
+    ? document.getElementById("salon").value
+    : usuarioActual.salon;
+  const domingoActual = obtenerDomingoAnterior();
+  const fechaInicio = new Date(`${domingoActual}T00:00:00`);
+  fechaInicio.setDate(fechaInicio.getDate() - 12 * 7);
+
+  document.getElementById("resumenSalon").value = salon;
+  document.getElementById("resumenDesde").value = [
+    fechaInicio.getFullYear(),
+    String(fechaInicio.getMonth() + 1).padStart(2, "0"),
+    String(fechaInicio.getDate()).padStart(2, "0")
+  ].join("-");
+  document.getElementById("resumenHasta").value = domingoActual;
+  cargarNinosResumen();
+  document.getElementById("contenidoResumenNino").innerHTML = "";
+  document.getElementById("modalResumenNino").classList.remove("oculto");
+}
+
+    function cerrarResumenNino() {
+  document.getElementById("modalResumenNino").classList.add("oculto");
+}
+
+    function obtenerDomingosEntre(desdeTexto, hastaTexto) {
+  const domingos = [];
+  const fecha = new Date(`${desdeTexto}T00:00:00`);
+  const hasta = new Date(`${hastaTexto}T00:00:00`);
+
+  while (fecha <= hasta) {
+    domingos.push([ 
+      fecha.getFullYear(),
+      String(fecha.getMonth() + 1).padStart(2, "0"),
+      String(fecha.getDate()).padStart(2, "0")
+    ].join("-"));
+    fecha.setDate(fecha.getDate() + 7);
+  }
+
+  return domingos;
+}
+
+    function valorMasFrecuente(filas, propiedad) {
+  const cantidades = {};
+
+  filas.forEach(fila => {
+    const valor = String(fila[propiedad] || "").trim();
+    if (valor) {
+      cantidades[valor] = (cantidades[valor] || 0) + 1;
+    }
+  });
+
+  const valores = Object.keys(cantidades);
+  if (!valores.length) {
+    return "Sin datos";
+  }
+
+  return valores.sort((a, b) => cantidades[b] - cantidades[a])[0];
+}
+
+    function formatearFechaResumen(fechaTexto) {
+  return new Date(`${fechaTexto}T00:00:00`).toLocaleDateString("es-MX", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
+
+    function mostrarResumenNino() {
+  if (!usuarioActual ||
+      (usuarioActual.rol !== "Supervisor" &&
+       usuarioActual.rol !== "Administrador")) {
+    return;
+  }
+
+  const salon = document.getElementById("resumenSalon").value;
+  const nino = document.getElementById("resumenNino").value;
+  const desde = document.getElementById("resumenDesde").value;
+  const hasta = document.getElementById("resumenHasta").value;
+
+  if (!nino || !esDomingo(desde) || !esDomingo(hasta)) {
+    alert("Seleccione fechas de inicio y fin que sean domingos.");
+    return;
+  }
+
+  if (desde > hasta) {
+    alert("La fecha inicial no puede ser posterior a la fecha final.");
+    return;
+  }
+
+  const domingos = obtenerDomingosEntre(desde, hasta);
+  const registros = asistencias.filter(fila =>
+    String(fila.Salon) === salon &&
+    String(fila.Nombre) === nino &&
+    domingos.includes(String(fila.Fecha))
+  );
+  const registrosPorFecha = Object.fromEntries(
+    registros.map(fila => [String(fila.Fecha), fila])
+  );
+  const asistenciasContadas = registros.filter(fila => fila.Asistencia === "Sí").length;
+  const faltasContadas = registros.filter(fila => fila.Asistencia === "No").length;
+  const totalRegistradas = registros.length;
+  const sinRegistro = domingos.length - totalRegistradas;
+
+  const filasCalendario = domingos.map(fecha => {
+    const registro = registrosPorFecha[fecha];
+    const estado = !registro
+      ? "Sin registro"
+      : registro.Asistencia === "Sí" ? "Asistió" : "Falta";
+
+    return `
+      <tr>
+        <td>${formatearFechaResumen(fecha)}</td>
+        <td>${estado}</td>
+        <td>${registro ? escaparTexto(registro.Comportamiento || "-") : "-"}</td>
+        <td>${registro ? escaparTexto(registro.Participacion || "-") : "-"}</td>
+        <td>${registro ? escaparTexto(registro.Desarrollo || "-") : "-"}</td>
+      </tr>
+    `;
+  }).join("");
+
+  document.getElementById("contenidoResumenNino").innerHTML = `
+    <h3>${escaparTexto(nino)} | ${salon}</h3>
+    <p>Periodo: ${formatearFechaResumen(desde)} al ${formatearFechaResumen(hasta)}</p>
+
+    <div class="resumen-datos">
+      <div class="resumen-dato">Domingos del periodo<strong>${domingos.length}</strong></div>
+      <div class="resumen-dato">Asistencias<strong>${asistenciasContadas}</strong></div>
+      <div class="resumen-dato">Faltas<strong>${faltasContadas}</strong></div>
+      <div class="resumen-dato">Registros guardados<strong>${totalRegistradas}</strong></div>
+      <div class="resumen-dato">Sin registro<strong>${sinRegistro}</strong></div>
+      <div class="resumen-dato">Comportamiento predominante<strong>${escaparTexto(valorMasFrecuente(registros, "Comportamiento"))}</strong></div>
+      <div class="resumen-dato">Participación predominante<strong>${escaparTexto(valorMasFrecuente(registros, "Participacion"))}</strong></div>
+      <div class="resumen-dato">Desarrollo predominante<strong>${escaparTexto(valorMasFrecuente(registros, "Desarrollo"))}</strong></div>
+    </div>
+
+    <div class="tabla-scroll">
+      <table class="tabla-resumen">
+        <tr>
+          <th>Domingo</th>
+          <th>Estado</th>
+          <th>Comportamiento</th>
+          <th>Participación</th>
+          <th>Desarrollo</th>
+        </tr>
+        ${filasCalendario}
+      </table>
+    </div>
+  `;
 }
 
     function abrirAdministrarUsuarios() {
@@ -1371,7 +1643,9 @@ function cerrarModal(id) {
   document.getElementById("mensajeLogin").textContent = "";
 
   document.getElementById("modalUsuarios").classList.add("oculto");
+  document.getElementById("modalResumenNino").classList.add("oculto");
   document.getElementById("botonAdministrarUsuarios").classList.add("oculto");
+  document.getElementById("botonResumenNino").classList.add("oculto");
 
   document.getElementById("salon").disabled = false;
   document.getElementById("salonNuevoNino").disabled = false;
