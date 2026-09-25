@@ -24,7 +24,8 @@
     }
 
     .contenedor {
-      max-width: 1200px;
+      width: min(1600px, 100%);
+      max-width: 1600px;
       margin: auto;
       background: rgba(255, 255, 255, 0.93);
       padding: 25px;
@@ -74,6 +75,77 @@
 
     .login input {
       width: 90%;
+    }
+
+    .cinta {
+      display: none;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 18px;
+      border: 2px solid #e3a008;
+      background: #174ea6;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .cinta.visible {
+      display: block;
+    }
+
+    .cinta-contenido {
+      display: inline-block;
+      min-width: 100%;
+      padding: 9px 0;
+      animation: desplazamiento-cinta 24s linear infinite;
+    }
+
+    .cinta-contenido span {
+      margin-right: 70px;
+    }
+
+    @keyframes desplazamiento-cinta {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    .lista-anuncios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      max-height: 62vh;
+      overflow-y: auto;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .anuncio-item {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      border-left: 4px solid #e3a008;
+      background: #e8f5e9;
+    }
+
+    .anuncio-item.prioridad {
+      border-left-color: #174ea6;
+    }
+
+    .anuncio-item small {
+      margin-top: 4px;
+      color: #174ea6;
+    }
+
+    .anuncio-multimedia {
+      display: block;
+      max-width: 100%;
+      max-height: 300px;
+      margin: 10px auto 0;
+      object-fit: contain;
+    }
+
+    .boton-eliminar-anuncio {
+      width: auto !important;
+      margin-top: 8px;
     }
 
     button {
@@ -143,8 +215,30 @@
       min-width: 0;
       border-collapse: collapse;
       background: white;
-      table-layout: auto;
+      table-layout: fixed;
     }
+
+    .tabla-asistencia {
+      min-width: 1100px;
+    }
+
+    .tabla-asistencia th:nth-child(1),
+    .tabla-asistencia td:nth-child(1) { width: 25%; }
+
+    .tabla-asistencia th:nth-child(2),
+    .tabla-asistencia td:nth-child(2) { width: 8%; }
+
+    .tabla-asistencia th:nth-child(3),
+    .tabla-asistencia td:nth-child(3) { width: 15%; }
+
+    .tabla-asistencia th:nth-child(4),
+    .tabla-asistencia td:nth-child(4) { width: 15%; }
+
+    .tabla-asistencia th:nth-child(5),
+    .tabla-asistencia td:nth-child(5) { width: 15%; }
+
+    .tabla-asistencia th:nth-child(6),
+    .tabla-asistencia td:nth-child(6) { width: 22%; }
 
     th,
     td {
@@ -190,6 +284,329 @@
       color: #dc2626; /* Rojo */
       font-size: 18px;
       font-weight: bold;
+    }
+
+    .nombre-lider {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .acciones-lider {
+      display: flex;
+      flex-shrink: 0;
+      gap: 2px;
+    }
+
+    .accion-lider {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      margin: 2px;
+      border: 1px solid #174ea6;
+      background: white;
+      color: #174ea6;
+    }
+
+    .accion-lider:hover {
+      background: #174ea6;
+      color: white;
+    }
+
+    .accion-lider.boton-rojo {
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+    .accion-lider.boton-rojo:hover {
+      background: #dc2626;
+      color: white;
+    }
+
+    .accion-lider.boton-editar {
+      border-color: #e3a008;
+      color: #1e293b;
+    }
+
+    .accion-lider.boton-editar:hover {
+      background: #e3a008;
+      color: #1e293b;
+    }
+
+    .accion-lider svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      margin: auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .datos-clase {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      padding: 14px;
+      border-left: 6px solid #e3a008;
+      background: #e8f5e9;
+      text-align: left;
+    }
+
+    .datos-clase textarea,
+    .datos-clase input {
+      width: 100%;
+      margin: 4px 0;
+    }
+
+    .multimedia-clase {
+      display: block;
+      max-width: 100%;
+      max-height: 280px;
+      margin-top: 8px;
+    }
+
+    .ventana-cumpleanos,
+    .ventana-anuncios,
+    .ventana-clase {
+      max-width: 1100px;
+    }
+
+    .ventana-anuncios {
+      max-width: 1250px;
+    }
+
+    .cabecera-cumpleanos {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+
+    .cabecera-cumpleanos h2 {
+      margin: 0;
+      flex: 1;
+      text-align: left;
+    }
+
+    .cabecera-cumpleanos .cerrar-modal {
+      position: static;
+      flex-shrink: 0;
+      padding: 2px 10px;
+    }
+
+    #mesCumpleanos {
+      width: auto;
+      min-width: 145px;
+      margin: 0;
+    }
+
+    .calendario-cumpleanos {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 5px;
+      margin-top: 16px;
+    }
+
+    .dia-semana,
+    .dia-cumpleanos {
+      min-height: 115px;
+      padding: 7px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .dia-semana {
+      min-height: auto;
+      background: #174ea6;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .dia-cumpleanos {
+      background: #e8f5e9;
+    }
+
+    .dia-cumpleanos.vacio {
+      background: white;
+    }
+
+    .numero-dia {
+      display: block;
+      margin-bottom: 5px;
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .cumpleanero {
+      display: block;
+      margin-top: 4px;
+      padding: 4px;
+      background: white;
+      border-left: 3px solid #e3a008;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .formulario-anuncio {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(190px, 0.35fr);
+      gap: 8px 14px;
+      align-items: end;
+      text-align: left;
+    }
+
+    .formulario-anuncio input,
+    .formulario-anuncio textarea {
+      width: 100%;
+      margin: 4px 0;
+    }
+
+    .formulario-anuncio textarea {
+      min-height: 110px;
+    }
+
+    .campo-multimedia-anuncio {
+      text-align: center;
+    }
+
+    .campo-multimedia-anuncio label {
+      display: block;
+      font-weight: bold;
+    }
+
+    .campo-multimedia-anuncio input {
+      text-align: left;
+    }
+
+    .anuncios-pasados {
+      margin-top: 22px;
+      padding-top: 12px;
+      border-top: 2px solid #e3a008;
+      text-align: left;
+    }
+
+    .anuncios-pasados summary {
+      color: #174ea6;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .anuncio-pasado {
+      opacity: 0.78;
+    }
+
+    .fila-falta td {
+      color: #dc2626;
+    }
+
+    .ventana-clase .tabla-resumen {
+      min-width: 1050px;
+      table-layout: fixed;
+    }
+
+    .ventana-clase .tabla-resumen th:nth-child(1),
+    .ventana-clase .tabla-resumen td:nth-child(1) {
+      width: 20%;
+      white-space: nowrap;
+    }
+
+    .ventana-clase .tabla-resumen th:nth-child(2),
+    .ventana-clase .tabla-resumen td:nth-child(2) { width: 11%; }
+
+    .ventana-clase .tabla-resumen th:nth-child(3),
+    .ventana-clase .tabla-resumen td:nth-child(3) { width: 12%; }
+
+    .ventana-clase .tabla-resumen th:nth-child(4),
+    .ventana-clase .tabla-resumen td:nth-child(4) {
+      width: 18%;
+      white-space: nowrap;
+    }
+
+    .ventana-clase .tabla-resumen th:nth-child(5),
+    .ventana-clase .tabla-resumen td:nth-child(5) { width: 14%; }
+
+    .ventana-clase .tabla-resumen th:nth-child(6),
+    .ventana-clase .tabla-resumen td:nth-child(6) { width: 14%; }
+
+    .ventana-clase .tabla-resumen th:nth-child(7),
+    .ventana-clase .tabla-resumen td:nth-child(7) { width: 25%; }
+
+    .anuncio-cabecera {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .anuncio-cabecera strong {
+      color: #174ea6;
+      font-size: 19px;
+    }
+
+    .anuncio-fecha {
+      flex-shrink: 0;
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .multimedia-ampliable {
+      cursor: zoom-in;
+    }
+
+    .cinta-anuncios {
+      border-color: #174ea6;
+      background: #174ea6;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .cinta-cumpleanos {
+      border-color: #e3a008;
+      background: #16803c;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .datos-clase {
+        grid-template-columns: 1fr;
+      }
+
+      .dia-semana,
+      .dia-cumpleanos {
+        min-height: 90px;
+        padding: 4px;
+        font-size: 11px;
+      }
+
+      .cumpleanero {
+        font-size: 10px;
+      }
+
+      .cabecera-cumpleanos {
+        align-items: center;
+      }
+
+      .formulario-anuncio {
+        grid-template-columns: 1fr;
+      }
+
+      .ventana-cumpleanos,
+      .ventana-anuncios {
+        max-width: 100%;
+      }
+
+      #mesCumpleanos {
+        min-width: 125px;
+      }
     }
 
     textarea {
@@ -244,6 +661,14 @@
 .ventana-resumen {
   max-width: 850px;
 }
+
+    .ventana-clase {
+      max-width: 1250px;
+    }
+
+    .ventana-cumpleanos {
+      max-width: 1250px;
+    }
 
 .filtros-resumen {
   display: grid;
@@ -386,6 +811,7 @@
     <button id="botonIngresar" onclick="iniciarSesion()">Ingresar</button>
 
     <p id="mensajeLogin" class="mensaje"></p>
+    <div id="cintaAnunciosLogin" class="cinta" aria-live="polite"></div>
   </section>
 
   <section id="pantallaSistema" class="contenedor oculto">
@@ -411,6 +837,15 @@
           onclick="abrirResumenNino()">
           Resumen del niño
         </button>
+
+        <button id="botonResumenClase"
+          class="oculto"
+          onclick="abrirResumenClase()">
+          Resumen de la clase
+        </button>
+
+        <button onclick="abrirCalendarioCumpleanos()">Cumpleaños</button>
+        <button onclick="abrirAnuncios()">Anuncios</button>
 
         <button onclick="cerrarSesion()">Cerrar sesión</button>
       </div>
@@ -441,6 +876,12 @@
 
       <input id="nombreNino" type="text" placeholder="Nombre completo del niño">
 
+      <label for="cumpleanosNino">Cumpleaños:</label>
+      <input id="cumpleanosNino" type="text" inputmode="numeric"
+        placeholder="DD/MM" pattern="[0-9]{1,2}[/-][0-9]{1,2}"
+        aria-label="Cumpleaños del niño, día y mes"
+        onblur="this.value = formatearCumpleanosEntrada(this.value)">
+
       <select id="salonNuevoNino">
         <option value="Semillas">Semillas</option>
         <option value="Plantas">Plantas</option>
@@ -452,6 +893,90 @@
     </div>
 
     <div id="tablaAsistencia"></div>
+    <div id="cintaCumpleanosSistema" class="cinta" aria-live="polite"></div>
+
+
+      <div id="modalResumenClase" class="modal oculto">
+    <div class="ventana-usuarios ventana-resumen ventana-clase">
+      <button class="cerrar-modal" onclick="cerrarModal('modalResumenClase')">×</button>
+      <h2>Resumen de la clase</h2>
+      <div class="filtros-resumen">
+        <div>
+          <label for="resumenClaseSalon">Salón:</label>
+          <select id="resumenClaseSalon">
+            <option value="Semillas">Semillas</option>
+            <option value="Plantas">Plantas</option>
+            <option value="Arboles">Árboles</option>
+          </select>
+        </div>
+        <div>
+          <label for="resumenClaseFecha">Fecha:</label>
+          <input id="resumenClaseFecha" type="date" min="1970-01-04" step="7">
+        </div>
+      </div>
+      <button onclick="mostrarResumenClase()">Consultar resumen</button>
+      <div id="contenidoResumenClase"></div>
+    </div>
+  </div>
+
+  <div id="modalCumpleanos" class="modal oculto">
+    <div class="ventana-usuarios ventana-cumpleanos">
+      <div class="cabecera-cumpleanos">
+        <h2>Cumpleaños de los niños</h2>
+        <select id="mesCumpleanos" aria-label="Seleccionar mes" onchange="mostrarCalendarioCumpleanos()">
+          <option value="01">Enero</option><option value="02">Febrero</option>
+          <option value="03">Marzo</option><option value="04">Abril</option>
+          <option value="05">Mayo</option><option value="06">Junio</option>
+          <option value="07">Julio</option><option value="08">Agosto</option>
+          <option value="09">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+        <button class="cerrar-modal" onclick="cerrarModal('modalCumpleanos')">×</button>
+      </div>
+      <div id="calendarioCumpleanos"></div>
+    </div>
+  </div>
+
+  <div id="modalAnuncios" class="modal oculto">
+    <div class="ventana-usuarios ventana-anuncios">
+      <button class="cerrar-modal" onclick="cerrarModal('modalAnuncios')">×</button>
+      <h2>Anuncios</h2>
+      <div class="formulario-anuncio">
+        <div>
+          <label for="tituloAnuncio">Título:</label>
+          <input id="tituloAnuncio" type="text" placeholder="Título del anuncio">
+          <label for="textoAnuncio">Descripción:</label>
+          <textarea id="textoAnuncio" placeholder="Escriba el anuncio"></textarea>
+        </div>
+        <div>
+          <label for="fechaAnuncio">Fecha límite (opcional):</label>
+          <input id="fechaAnuncio" type="date">
+          <div class="campo-multimedia-anuncio">
+            <label for="multimediaAnuncio">Imagen o video (opcional):</label>
+            <input id="multimediaAnuncio" type="file" accept="image/*,video/*">
+            <small>Imagen hasta 2 MB o video hasta 5 MB.</small>
+          </div>
+        </div>
+      </div>
+      <button id="botonGuardarAnuncio" onclick="guardarAnuncio()">Publicar anuncio</button>
+      <button id="botonCancelarEdicionAnuncio" class="oculto" onclick="cancelarEdicionAnuncio()">Cancelar edición</button>
+      <div id="listaAnuncios" class="lista-anuncios"></div>
+      <details class="anuncios-pasados">
+        <summary>Anuncios pasados</summary>
+        <div id="listaAnunciosPasados" class="lista-anuncios"></div>
+      </details>
+    </div>
+  </div>
+
+  <div id="modalConfirmacionAnuncio" class="modal oculto">
+    <div class="ventana-usuarios">
+      <button class="cerrar-modal" onclick="cerrarModal('modalConfirmacionAnuncio')">×</button>
+      <h2>Confirmar eliminación</h2>
+      <p id="textoConfirmacionAnuncio"></p>
+      <button class="boton-rojo" onclick="eliminarAnuncioConfirmado()">Sí, eliminar</button>
+      <button onclick="cerrarModal('modalConfirmacionAnuncio')">Cancelar</button>
+    </div>
+  </div>
 
 
       <div id="modalUsuarios" class="modal oculto">
@@ -554,6 +1079,17 @@
     <input id="nombreNinoModal"
       type="text"
       placeholder="Nombre completo del niño">
+
+    <label for="cumpleanosNinoModal">Cumpleaños:</label>
+    <input id="cumpleanosNinoModal" type="text" inputmode="numeric"
+      placeholder="DD/MM" pattern="[0-9]{1,2}[/-][0-9]{1,2}"
+      onblur="this.value = formatearCumpleanosEntrada(this.value)">
+
+    <label for="estadoNinoModal">Estado:</label>
+    <select id="estadoNinoModal">
+      <option value="Activo">Activo</option>
+      <option value="Inactivo">Inactivo</option>
+    </select>
 
     <button onclick="guardarNombreNino()">
       Guardar nombre
@@ -664,8 +1200,88 @@ const HOJAS = {
   ninos: "Niños",
   usuarios: "Usuarios",
   asistencias: "Asistencias",
-  maestros: "Maestros"
+  maestros: "Maestros",
+  anuncios: "Anuncios"
 };
+
+let anuncios = JSON.parse(
+  localStorage.getItem("anunciosInfantilRedencion")
+) || [];
+
+let datosNinos = JSON.parse(
+  localStorage.getItem("datosNinosRedencion")
+) || {};
+
+function claveNino(salon, nombre) {
+  return `${salon}::${nombre}`;
+}
+
+function normalizarCumpleanos(valor) {
+  const texto = String(valor || "").trim();
+  let partes;
+
+  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(texto)) {
+    partes = texto.split("-").slice(1);
+  } else if (/^\d{1,2}\/\d{1,2}$/.test(texto)) {
+    partes = texto.split("/").reverse();
+  } else if (/^\d{1,2}-\d{1,2}$/.test(texto)) {
+    partes = texto.split("-");
+    if (Number(partes[0]) > 12) partes.reverse();
+  } else {
+    return "";
+  }
+
+  const mes = Number(partes[0]);
+  const dia = Number(partes[1]);
+  const fecha = new Date(2024, mes - 1, dia);
+  if (mes < 1 || mes > 12 || dia < 1 || dia > 31 ||
+      fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) {
+    return "";
+  }
+
+  return `${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+}
+
+function formatearCumpleanosEntrada(valor) {
+  const normalizado = normalizarCumpleanos(valor);
+  return normalizado ? normalizado.split("-").reverse().join("/") : "";
+}
+
+function obtenerDatosNino(salon, nombre) {
+  return datosNinos[claveNino(salon, nombre)] || {
+    cumpleanos: "",
+    estado: "Activo"
+  };
+}
+
+function guardarDatosNinos() {
+  localStorage.setItem("datosNinosRedencion", JSON.stringify(datosNinos));
+}
+
+function actualizarEstadoNino(salon, nombre) {
+  const clave = claveNino(salon, nombre);
+  datosNinos[clave] ||= { cumpleanos: "", estado: "Activo" };
+  const registros = asistencias
+    .filter(fila => String(fila.Salon) === salon && String(fila.Nombre) === nombre)
+    .sort((a, b) => String(b.Fecha).localeCompare(String(a.Fecha)));
+
+  if (!registros.length) return;
+
+  const ultimosTres = registros.slice(0, 3);
+  const tieneTresFaltas = ultimosTres.length === 3 &&
+    ultimosTres.every(fila => fila.Asistencia === "No");
+
+  datosNinos[clave].estado = tieneTresFaltas
+    ? "Inactivo"
+    : registros.some(fila => fila.Asistencia === "Sí")
+      ? "Activo"
+      : datosNinos[clave].estado || "Activo";
+}
+
+function actualizarEstadosNinos(salon) {
+  ninos[salon].forEach(nombre => actualizarEstadoNino(salon, nombre));
+  guardarDatosNinos();
+}
 
 async function leerHoja(nombreHoja) {
   const firebase = await window.firebaseReady;
@@ -678,6 +1294,9 @@ async function leerHoja(nombreHoja) {
 
 async function reemplazarHoja(nombreHoja, filas) {
   const firebase = await window.firebaseReady;
+  if (!firebase || typeof firebase.set !== "function") {
+    throw new Error("La sincronización de Firebase no está disponible.");
+  }
   await firebase.set(
     firebase.ref(firebase.database, nombreHoja),
     filas
@@ -692,7 +1311,12 @@ function sincronizarHoja(nombreHoja, filas) {
 
 function filasDeNinos() {
   return Object.entries(ninos).flatMap(([salon, nombres]) =>
-    nombres.map(nombre => ({ Nombre: nombre, Salon: salon }))
+    nombres.map(nombre => ({
+      Nombre: nombre,
+      Salon: salon,
+      Cumpleanos: obtenerDatosNino(salon, nombre).cumpleanos,
+      Estado: obtenerDatosNino(salon, nombre).estado
+    }))
   );
 }
 
@@ -707,21 +1331,35 @@ function filasDeUsuarios() {
 
 async function cargarDatosDesdeAPI() {
   try {
-    const [filasNinos, filasUsuarios, filasAsistencias, filasMaestros] =
+    const [filasNinos, filasUsuarios, filasAsistencias, filasMaestros, filasAnuncios] =
       await Promise.all([
         leerHoja(HOJAS.ninos),
         leerHoja(HOJAS.usuarios),
         leerHoja(HOJAS.asistencias),
-        leerHoja(HOJAS.maestros)
+        leerHoja(HOJAS.maestros),
+        leerHoja(HOJAS.anuncios)
       ]);
+
+    if (filasAnuncios.length) {
+      anuncios = filasAnuncios;
+      localStorage.setItem("anunciosInfantilRedencion", JSON.stringify(anuncios));
+    } else {
+      sincronizarHoja(HOJAS.anuncios, anuncios);
+    }
+    mostrarAnunciosLogin();
 
     if (filasNinos.length) {
       ninos = { Semillas: [], Plantas: [], Arboles: [] };
       filasNinos.forEach(fila => {
         if (ninos[fila.Salon]) {
           ninos[fila.Salon].push(fila.Nombre);
+          datosNinos[claveNino(fila.Salon, fila.Nombre)] = {
+            cumpleanos: normalizarCumpleanos(fila.Cumpleanos || fila.cumpleanos),
+            estado: fila.Estado || fila.estado || "Activo"
+          };
         }
       });
+      guardarDatosNinos();
       localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
     } else {
       sincronizarHoja(HOJAS.ninos, filasDeNinos());
@@ -747,6 +1385,7 @@ async function cargarDatosDesdeAPI() {
         "asistenciasRedencion",
         JSON.stringify(asistencias)
       );
+      Object.keys(ninos).forEach(salon => actualizarEstadosNinos(salon));
     }
 
     if (filasMaestros.length) {
@@ -849,6 +1488,7 @@ async function cargarDatosDesdeAPI() {
       });
 
       cargarDatosDesdeAPI();
+      mostrarAnunciosLogin();
     });
 
     function obtenerDomingoAnterior(fechaTexto) {
@@ -960,6 +1600,39 @@ async function cargarDatosDesdeAPI() {
       );
     }
 
+    function obtenerDatosClase(salon, fecha) {
+      return asistencias.find(fila =>
+        String(fila.Salon) === salon && String(fila.Fecha) === fecha &&
+        (fila.Comentario || fila.MediaData)
+      ) || null;
+    }
+
+    function mostrarMultimediaClase(fila) {
+      if (!fila?.MediaData || !fila.MediaTipo) return "";
+      const datos = escaparTexto(fila.MediaData);
+      if (fila.MediaTipo.startsWith("image/")) {
+            return `<img class="multimedia-clase multimedia-ampliable" src="${datos}" alt="Archivo de la clase" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)">`;
+      }
+      if (fila.MediaTipo.startsWith("video/")) {
+            return `<video class="multimedia-clase multimedia-ampliable" controls preload="metadata" src="${datos}" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)"></video>`;
+      }
+      if (fila.MediaTipo.startsWith("audio/")) {
+            return `<audio class="multimedia-clase multimedia-ampliable" controls src="${datos}" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)"></audio>`;
+      }
+      return "";
+    }
+
+        function abrirMultimediaDesdeElemento(evento, elemento) {
+          evento.preventDefault();
+          evento.stopPropagation();
+          const ventana = window.open("", "_blank", "width=900,height=700,resizable=yes,scrollbars=yes");
+          if (!ventana) return;
+          const fuente = escaparTexto(elemento.currentSrc || elemento.src);
+          const tipo = elemento.tagName === "VIDEO" ? "video" : elemento.tagName === "AUDIO" ? "audio" : "img";
+          ventana.document.write(`<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>Archivo multimedia</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#1e293b}img,video{max-width:95vw;max-height:90vh}audio{width:min(700px,90vw)}</style></head><body><${tipo} src="${fuente}" ${tipo !== "img" ? "controls autoplay" : ""}></${tipo}><\/body></html>`);
+          ventana.document.close();
+        }
+
     function iniciarSesion() {
       const usuario = document.getElementById("usuario").value.trim();
       const contrasena = document.getElementById("contrasena").value;
@@ -1003,6 +1676,7 @@ async function cargarDatosDesdeAPI() {
 
       mostrarAsistencia();
       mostrarPanelUsuarios();
+      mostrarCintaCumpleanos();
     }
 
     function mostrarAsistencia() {
@@ -1025,7 +1699,7 @@ async function cargarDatosDesdeAPI() {
       let html = `
         <h2>Salón: ${salon}</h2>
         <div class="tabla-scroll">
-        <table>
+        <table class="tabla-asistencia">
           <tr>
             <th>Nombre</th>
             <th>Asistencia</th>
@@ -1033,10 +1707,6 @@ async function cargarDatosDesdeAPI() {
             <th>Participación</th>
             <th>Desarrollo de habilidades</th>
             <th>Observaciones</th>
-            ${puedeEliminar ? "<th>Eliminar</th>" : ""}
-            ${usuarioActual.rol === "Administrador"
-              ? "<th>Modificar</th>"
-              : ""}
           </tr>
       `;
 
@@ -1046,17 +1716,37 @@ async function cargarDatosDesdeAPI() {
 
         html += `
           <tr>
-            <td class="nombre-nino">${escaparTexto(nino)}</td>
+            <td class="nombre-nino">
+              <div class="nombre-lider">
+                <span>${escaparTexto(nino)}</span>
+                <span class="acciones-lider">
+                  ${puedeEliminar ? `
+                    <button class="accion-lider boton-rojo" title="Eliminar niño" aria-label="Eliminar niño"
+                      onclick="eliminarNino('${salon}', ${indice})">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
+                    </button>
+                  ` : ""}
+                  ${usuarioActual.rol === "Administrador" ? `
+                    <button class="accion-lider boton-editar" title="Modificar niño" aria-label="Modificar niño"
+                      onclick="editarNino('${salon}', ${indice})">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-4-4L4 16v4Z" /><path d="m13.5 6.5 4 4" /></svg>
+                    </button>
+                  ` : ""}
+                </span>
+              </div>
+            </td>
 
             <td>
               <input id="asistencia-${id}" type="checkbox"
                 ${asistenciaGuardada?.Asistencia === "Sí" ? "checked" : ""}
-                ${puedeModificar ? "" : "disabled"}>
+                ${puedeModificar ? "" : "disabled"}
+                onchange="actualizarCamposAsistencia('${id}')">
             </td>
 
             <td>
               <select id="comportamiento-${id}"
-                ${puedeModificar ? "" : "disabled"}>
+                ${puedeModificar && asistenciaGuardada?.Asistencia === "Sí" ? "" : "disabled"}>
+                <option value="" ${!asistenciaGuardada?.Asistencia || asistenciaGuardada?.Asistencia !== "Sí" ? "selected" : ""}>-</option>
                 <option ${asistenciaGuardada?.Comportamiento === "Excelente" ? "selected" : ""}>Excelente</option>
                 <option ${asistenciaGuardada?.Comportamiento === "Bueno" ? "selected" : ""}>Bueno</option>
                 <option ${asistenciaGuardada?.Comportamiento === "Regular" ? "selected" : ""}>Regular</option>
@@ -1066,7 +1756,8 @@ async function cargarDatosDesdeAPI() {
 
             <td>
               <select id="participacion-${id}"
-                ${puedeModificar ? "" : "disabled"}>
+                ${puedeModificar && asistenciaGuardada?.Asistencia === "Sí" ? "" : "disabled"}>
+                <option value="" ${!asistenciaGuardada?.Asistencia || asistenciaGuardada?.Asistencia !== "Sí" ? "selected" : ""}>-</option>
                 <option ${asistenciaGuardada?.Participacion === "Alta" ? "selected" : ""}>Alta</option>
                 <option ${asistenciaGuardada?.Participacion === "Media" ? "selected" : ""}>Media</option>
                 <option ${asistenciaGuardada?.Participacion === "Baja" ? "selected" : ""}>Baja</option>
@@ -1075,7 +1766,8 @@ async function cargarDatosDesdeAPI() {
 
             <td>
               <select id="desarrollo-${id}"
-                ${puedeModificar ? "" : "disabled"}>
+                ${puedeModificar && asistenciaGuardada?.Asistencia === "Sí" ? "" : "disabled"}>
+                <option value="" ${!asistenciaGuardada?.Asistencia || asistenciaGuardada?.Asistencia !== "Sí" ? "selected" : ""}>-</option>
                 <option ${asistenciaGuardada?.Desarrollo === "Excelente" ? "selected" : ""}>Excelente</option>
                 <option ${asistenciaGuardada?.Desarrollo === "Bueno" ? "selected" : ""}>Bueno</option>
                 <option ${asistenciaGuardada?.Desarrollo === "En proceso" ? "selected" : ""}>En proceso</option>
@@ -1084,26 +1776,10 @@ async function cargarDatosDesdeAPI() {
 
             <td>
               <textarea id="observaciones-${id}"
-                ${puedeModificar ? "" : "disabled"}
-                placeholder="Observaciones">${escaparTexto(asistenciaGuardada?.Observaciones || "")}</textarea>
+                ${puedeModificar && asistenciaGuardada?.Asistencia === "Sí" ? "" : "disabled"}
+                placeholder="Observaciones">${asistenciaGuardada?.Asistencia === "Sí" ? escaparTexto(asistenciaGuardada?.Observaciones || "") : ""}</textarea>
             </td>
 
-            ${puedeEliminar ? `
-              <td>
-                <button class="boton-rojo"
-                  onclick="eliminarNino('${salon}', ${indice})">
-                  Eliminar
-                </button>
-              </td>
-            ` : ""}
-            ${usuarioActual.rol === "Administrador" ? `
-              <td>
-                <button class="boton-editar"
-                  onclick="editarNino('${salon}', ${indice})">
-                  Modificar
-                </button>
-              </td>
-            ` : ""}
           </tr>
         `;
       });
@@ -1111,13 +1787,26 @@ async function cargarDatosDesdeAPI() {
       html += "</table></div>";
 
       if (puedeModificar) {
+        const datosClase = obtenerDatosClase(salon, fecha);
         html += `
+          <div class="datos-clase">
+            <div>
+              <label for="comentarioClase">Comentario de la clase:</label>
+              <textarea id="comentarioClase" placeholder="Comentario de la clase">${escaparTexto(datosClase?.Comentario || "")}</textarea>
+            </div>
+            <div>
+              <label for="multimediaClase">Archivo multimedia (imagen, video o audio):</label>
+              <input id="multimediaClase" type="file" accept="image/*,video/*,audio/*">
+              <small>Imagen/audio hasta 2 MB o video hasta 5 MB.</small>
+              ${mostrarMultimediaClase(datosClase)}
+            </div>
+          </div>
           <br>
           <button onclick="guardarAsistencia()">Guardar asistencia</button>
         `;
       } else {
         html += `
-          <p><strong>Modo supervisor:</strong>
+          <p><strong>Modo consulta:</strong>
           solamente puede consultar la información.</p>
         `;
       }
@@ -1125,8 +1814,24 @@ async function cargarDatosDesdeAPI() {
       document.getElementById("tablaAsistencia").innerHTML = html;
     }
 
+    function actualizarCamposAsistencia(id) {
+      const asistencia = document.getElementById(`asistencia-${id}`);
+      const habilitado = asistencia.checked && !asistencia.disabled;
+      ["comportamiento", "participacion", "desarrollo", "observaciones"].forEach(campo => {
+        const elemento = document.getElementById(`${campo}-${id}`);
+        elemento.disabled = !habilitado;
+        if (!habilitado) {
+          if (elemento.tagName === "SELECT") elemento.value = "";
+          else elemento.value = "";
+        }
+      });
+    }
+
     function agregarNino() {
       const nombre = document.getElementById("nombreNino").value.trim();
+      const cumpleanos = normalizarCumpleanos(
+        document.getElementById("cumpleanosNino").value
+      );
       const salonNuevo = document.getElementById("salonNuevoNino").value;
       const mensaje = document.getElementById("mensajeNino");
 
@@ -1143,10 +1848,16 @@ async function cargarDatosDesdeAPI() {
       }
 
       ninos[salonNuevo].push(nombre);
+      datosNinos[claveNino(salonNuevo, nombre)] = {
+        cumpleanos,
+        estado: "Activo"
+      };
+      guardarDatosNinos();
       ordenarNinos(salonNuevo);
       guardarNinos();
 
       document.getElementById("nombreNino").value = "";
+      document.getElementById("cumpleanosNino").value = "";
       mensaje.className = "exito";
       mensaje.textContent = "Niño agregado correctamente.";
 
@@ -1171,7 +1882,10 @@ async function cargarDatosDesdeAPI() {
       }
 
       const { salon, indice } = ninoEliminacionPendiente;
+      const nombre = ninos[salon][indice];
       ninos[salon].splice(indice, 1);
+      delete datosNinos[claveNino(salon, nombre)];
+      guardarDatosNinos();
       guardarNinos();
       ninoEliminacionPendiente = null;
       cerrarModal("modalConfirmacionNino");
@@ -1181,6 +1895,26 @@ async function cargarDatosDesdeAPI() {
     async function guardarAsistencia() {
       const salon = document.getElementById("salon").value;
       const fecha = document.getElementById("fecha").value;
+      const comentario = document.getElementById("comentarioClase")?.value.trim() || "";
+      const archivo = document.getElementById("multimediaClase")?.files[0];
+      const datosClase = obtenerDatosClase(salon, fecha);
+
+      if (archivo) {
+        const limite = archivo.type.startsWith("video/") ? 5 * 1024 * 1024 : 2 * 1024 * 1024;
+        if (archivo.size > limite) {
+          alert(`El archivo supera el límite permitido de ${archivo.type.startsWith("video/") ? "5 MB" : "2 MB"}.`);
+          return;
+        }
+      }
+
+      const multimedia = archivo
+        ? await new Promise((resolver, rechazar) => {
+            const lector = new FileReader();
+            lector.onload = () => resolver({ tipo: archivo.type, datos: lector.result });
+            lector.onerror = rechazar;
+            lector.readAsDataURL(archivo);
+          })
+        : { tipo: datosClase?.MediaTipo || "", datos: datosClase?.MediaData || "" };
 
       if (!esDomingo(fecha)) {
         alert("No se puede guardar la asistencia: seleccione un domingo.");
@@ -1200,7 +1934,10 @@ async function cargarDatosDesdeAPI() {
           Comportamiento: document.getElementById(`comportamiento-${id}`).value,
           Participacion: document.getElementById(`participacion-${id}`).value,
           Desarrollo: document.getElementById(`desarrollo-${id}`).value,
-          Observaciones: document.getElementById(`observaciones-${id}`).value
+          Observaciones: document.getElementById(`observaciones-${id}`).value,
+          Comentario: comentario,
+          MediaTipo: multimedia.tipo,
+          MediaData: multimedia.datos
         };
       });
 
@@ -1218,6 +1955,9 @@ async function cargarDatosDesdeAPI() {
         salon,
         filasAsistencia
       );
+
+      actualizarEstadosNinos(salon);
+      guardarNinos();
 
       mostrarExito(
         sincronizada
@@ -1255,6 +1995,7 @@ async function cargarDatosDesdeAPI() {
     function mostrarPanelUsuarios() {
   const boton = document.getElementById("botonAdministrarUsuarios");
   const botonResumen = document.getElementById("botonResumenNino");
+  const botonResumenClase = document.getElementById("botonResumenClase");
 
   if (usuarioActual && usuarioActual.rol === "Administrador") {
     boton.classList.remove("oculto");
@@ -1269,6 +2010,204 @@ async function cargarDatosDesdeAPI() {
   } else {
     botonResumen.classList.add("oculto");
   }
+
+  botonResumenClase.classList.toggle(
+    "oculto",
+    !usuarioActual || (usuarioActual.rol !== "Supervisor" && usuarioActual.rol !== "Administrador")
+  );
+}
+
+function nombreMesCumpleanos(fechaTexto) {
+  if (!fechaTexto) return "";
+  const [mes, dia] = normalizarCumpleanos(fechaTexto).split("-");
+  return new Date(2024, Number(mes) - 1, Number(dia)).toLocaleDateString("es-MX", {
+    day: "2-digit", month: "long"
+  });
+}
+
+function obtenerNinosConCumpleanos() {
+  const salones = usuarioActual?.rol === "Administrador" || usuarioActual?.rol === "Supervisor"
+    ? Object.entries(ninos)
+    : Object.entries(ninos).filter(([salon]) => salon === usuarioActual?.salon);
+  return salones.flatMap(([salon, nombres]) => nombres.map(nombre => ({
+    salon, nombre, cumpleanos: obtenerDatosNino(salon, nombre).cumpleanos
+  })).filter(nino => nino.cumpleanos));
+}
+
+function cumpleanosEstaSemana(fechaTexto) {
+  if (!fechaTexto) return false;
+  const [mes, dia] = fechaTexto.split("-").map(Number);
+  const hoy = new Date();
+  const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  const fin = new Date(inicio);
+  fin.setDate(fin.getDate() + 7);
+  const fecha = new Date(hoy.getFullYear(), mes - 1, dia);
+  if (fecha < inicio) fecha.setFullYear(hoy.getFullYear() + 1);
+  return fecha >= inicio && fecha <= fin;
+}
+
+function mostrarCintaCumpleanos() {
+  const mensajes = obtenerNinosConCumpleanos()
+    .filter(nino => cumpleanosEstaSemana(nino.cumpleanos))
+    .map(nino => `${nino.nombre} (${nino.salon})`);
+  mostrarCinta("cintaCumpleanosSistema", mensajes.length ? [`CUMPLEAÑOS DE LA SEMANA: ${mensajes.join("  ·  ")}`] : []);
+}
+
+function mostrarCinta(id, mensajes) {
+  const cinta = document.getElementById(id);
+  if (!cinta || !mensajes.length) {
+    if (cinta) {
+      cinta.classList.remove("visible");
+      cinta.innerHTML = "";
+    }
+    return;
+  }
+  cinta.classList.toggle("cinta-anuncios", id === "cintaAnunciosLogin");
+  cinta.classList.toggle("cinta-cumpleanos", id === "cintaCumpleanosSistema");
+  cinta.innerHTML = `<div class="cinta-contenido">${mensajes.map(mensaje => `<span>${escaparTexto(mensaje)}</span>`).join("")}</div>`;
+  cinta.classList.add("visible");
+}
+
+function textoAnuncio(anuncio) {
+  return anuncio.Titulo ? `ANUNCIO: ${anuncio.Titulo} | ${anuncio.Texto}` : `ANUNCIO: ${anuncio.Texto}`;
+}
+
+function formatearFechaAnuncio(fechaTexto) {
+  if (!fechaTexto) return "";
+  const [ano, mes, dia] = fechaTexto.split("-");
+  return `${dia}/${mes}`;
+}
+
+function ordenarAnuncios(lista) {
+  return [...lista].sort((a, b) =>
+    (a.Rol === "Administrador" ? 0 : 1) - (b.Rol === "Administrador" ? 0 : 1) ||
+    Number(b.Fecha || 0) - Number(a.Fecha || 0)
+  );
+}
+
+function mostrarAnunciosLogin() {
+  mostrarCinta("cintaAnunciosLogin", ordenarAnuncios(anuncios.filter(anuncioVigente)).map(textoAnuncio));
+}
+
+function anuncioVigente(anuncio) {
+  return !anuncio.FechaLimite || anuncio.FechaLimite >= obtenerFechaActual();
+}
+
+function obtenerFechaActual() {
+  const fecha = new Date();
+  return [fecha.getFullYear(), String(fecha.getMonth() + 1).padStart(2, "0"), String(fecha.getDate()).padStart(2, "0")].join("-");
+}
+
+function mostrarTarjetaAnuncio(anuncio, indice, pasado = false) {
+  return `
+    <div class="anuncio-item ${anuncio.Rol === "Administrador" ? "prioridad" : ""} ${pasado ? "anuncio-pasado" : ""}">
+      <div class="anuncio-cabecera">
+        <strong>${escaparTexto(anuncio.Titulo || "Anuncio")}</strong>
+        ${anuncio.FechaLimite ? `<span class="anuncio-fecha">${formatearFechaAnuncio(anuncio.FechaLimite)}</span>` : ""}
+      </div>
+      <span>${escaparTexto(anuncio.Texto)}</span>
+      ${anuncio.MediaTipo?.startsWith("image/") ? `<img class="anuncio-multimedia multimedia-ampliable" src="${escaparTexto(anuncio.MediaData)}" alt="Imagen del anuncio" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)">` : ""}
+      ${anuncio.MediaTipo?.startsWith("video/") ? `<video class="anuncio-multimedia multimedia-ampliable" controls preload="metadata" src="${escaparTexto(anuncio.MediaData)}" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)"></video>` : ""}
+      <small>${escaparTexto(anuncio.Autor || "Usuario")} ${anuncio.Rol === "Administrador" ? "· Prioridad administrativa" : ""}</small>
+      ${usuarioActual?.rol === "Administrador" ? `<button onclick="editarAnuncio(${indice})">Modificar anuncio</button><button class="boton-eliminar-anuncio boton-rojo" onclick="confirmarEliminarAnuncio(${indice})">Eliminar anuncio</button>` : ""}
+    </div>
+  `;
+}
+
+function mostrarListaAnuncios() {
+  const lista = document.getElementById("listaAnuncios");
+  lista.innerHTML = ordenarAnuncios(anuncios.filter(anuncioVigente))
+    .map(anuncio => mostrarTarjetaAnuncio(anuncio, anuncios.indexOf(anuncio)))
+    .join("") || "<p>No hay anuncios publicados.</p>";
+  document.getElementById("listaAnunciosPasados").innerHTML = ordenarAnuncios(anuncios.filter(anuncio => !anuncioVigente(anuncio)))
+    .map(anuncio => mostrarTarjetaAnuncio(anuncio, anuncios.indexOf(anuncio), true))
+    .join("") || "<p>No hay anuncios pasados.</p>";
+}
+
+function abrirAnuncios() {
+  mostrarListaAnuncios();
+  document.getElementById("modalAnuncios").classList.remove("oculto");
+}
+
+async function guardarAnuncio() {
+  if (!usuarioActual) return;
+  const titulo = document.getElementById("tituloAnuncio").value.trim();
+  const texto = document.getElementById("textoAnuncio").value.trim();
+  const fechaLimite = document.getElementById("fechaAnuncio").value;
+  if (!texto) return alert("Escriba el contenido del anuncio.");
+  const archivo = document.getElementById("multimediaAnuncio").files[0];
+  const limite = archivo?.type.startsWith("video/") ? 5 * 1024 * 1024 : 2 * 1024 * 1024;
+  if (archivo && archivo.size > limite) return alert("El archivo supera el límite permitido.");
+  const multimedia = archivo ? await new Promise((resolver, rechazar) => {
+    const lector = new FileReader();
+    lector.onload = () => resolver({ tipo: archivo.type, datos: lector.result });
+    lector.onerror = rechazar;
+    lector.readAsDataURL(archivo);
+  }) : {
+    tipo: anuncioEditando === null ? "" : anuncios[anuncioEditando].MediaTipo || "",
+    datos: anuncioEditando === null ? "" : anuncios[anuncioEditando].MediaData || ""
+  };
+  const datosAnuncio = { Titulo: titulo, Texto: texto, Autor: usuarioActual.usuario, Rol: usuarioActual.rol,
+    Fecha: Date.now(), FechaLimite: fechaLimite, MediaTipo: multimedia.tipo, MediaData: multimedia.datos };
+  if (anuncioEditando === null) anuncios.push(datosAnuncio);
+  else anuncios[anuncioEditando] = { ...anuncios[anuncioEditando], ...datosAnuncio };
+  localStorage.setItem("anunciosInfantilRedencion", JSON.stringify(anuncios));
+  await reemplazarHoja(HOJAS.anuncios, anuncios);
+  document.getElementById("tituloAnuncio").value = "";
+  document.getElementById("textoAnuncio").value = "";
+  document.getElementById("fechaAnuncio").value = "";
+  document.getElementById("multimediaAnuncio").value = "";
+  anuncioEditando = null;
+  document.getElementById("botonGuardarAnuncio").textContent = "Publicar anuncio";
+  document.getElementById("botonCancelarEdicionAnuncio").classList.add("oculto");
+  mostrarListaAnuncios();
+  mostrarAnunciosLogin();
+  mostrarExito("El anuncio fue publicado correctamente.");
+}
+
+let anuncioPendiente = null;
+let anuncioEditando = null;
+
+function editarAnuncio(indice) {
+  if (usuarioActual?.rol !== "Administrador") return;
+  const anuncio = anuncios[indice];
+  anuncioEditando = indice;
+  document.getElementById("tituloAnuncio").value = anuncio.Titulo || "";
+  document.getElementById("textoAnuncio").value = anuncio.Texto || "";
+  document.getElementById("fechaAnuncio").value = anuncio.FechaLimite || "";
+  document.getElementById("multimediaAnuncio").value = "";
+  document.getElementById("botonGuardarAnuncio").textContent = "Guardar cambios";
+  document.getElementById("botonCancelarEdicionAnuncio").classList.remove("oculto");
+}
+
+function cancelarEdicionAnuncio() {
+  anuncioEditando = null;
+  document.getElementById("tituloAnuncio").value = "";
+  document.getElementById("textoAnuncio").value = "";
+  document.getElementById("fechaAnuncio").value = "";
+  document.getElementById("multimediaAnuncio").value = "";
+  document.getElementById("botonGuardarAnuncio").textContent = "Publicar anuncio";
+  document.getElementById("botonCancelarEdicionAnuncio").classList.add("oculto");
+}
+
+function confirmarEliminarAnuncio(indice) {
+  if (usuarioActual?.rol !== "Administrador") return;
+  anuncioPendiente = indice;
+  document.getElementById("textoConfirmacionAnuncio").textContent =
+    `¿Está seguro de eliminar el anuncio "${anuncios[indice].Titulo || "Anuncio"}"?`;
+  document.getElementById("modalConfirmacionAnuncio").classList.remove("oculto");
+}
+
+async function eliminarAnuncioConfirmado() {
+  if (anuncioPendiente === null) return;
+  anuncios.splice(anuncioPendiente, 1);
+  anuncioPendiente = null;
+  localStorage.setItem("anunciosInfantilRedencion", JSON.stringify(anuncios));
+  await reemplazarHoja(HOJAS.anuncios, anuncios);
+  cerrarModal("modalConfirmacionAnuncio");
+  mostrarListaAnuncios();
+  mostrarAnunciosLogin();
+  mostrarExito("El anuncio fue eliminado correctamente.");
 }
 
     function cargarNinosResumen() {
@@ -1306,6 +2245,74 @@ async function cargarDatosDesdeAPI() {
   cargarNinosResumen();
   document.getElementById("contenidoResumenNino").innerHTML = "";
   document.getElementById("modalResumenNino").classList.remove("oculto");
+}
+
+function abrirResumenClase() {
+  if (!usuarioActual || (usuarioActual.rol !== "Supervisor" && usuarioActual.rol !== "Administrador")) return;
+  const salon = usuarioActual.salon === "todos"
+    ? document.getElementById("salon").value
+    : usuarioActual.salon;
+  document.getElementById("resumenClaseSalon").value = salon;
+  document.getElementById("resumenClaseFecha").value = document.getElementById("fecha").value;
+  document.getElementById("contenidoResumenClase").innerHTML = "";
+  document.getElementById("modalResumenClase").classList.remove("oculto");
+}
+
+function mostrarResumenClase() {
+  if (!usuarioActual || (usuarioActual.rol !== "Supervisor" && usuarioActual.rol !== "Administrador")) return;
+  const salon = document.getElementById("resumenClaseSalon").value;
+  const fecha = document.getElementById("resumenClaseFecha").value;
+  if (!fecha || !esDomingo(fecha)) return alert("Seleccione una fecha que sea domingo.");
+  const lideres = ninos[salon] || [];
+  const registros = asistencias.filter(fila => String(fila.Salon) === salon && String(fila.Fecha) === fecha);
+  const registrosPorNombre = Object.fromEntries(registros.map(fila => [String(fila.Nombre), fila]));
+  const asistentes = lideres.filter(nombre => registrosPorNombre[nombre]?.Asistencia === "Sí").length;
+  const filas = lideres.map(nombre => {
+    const registro = registrosPorNombre[nombre];
+    const asistio = registro?.Asistencia === "Sí";
+    return `<tr class="${registro && !asistio ? "fila-falta" : ""}"><td>${escaparTexto(nombre)}</td><td>${escaparTexto(obtenerDatosNino(salon, nombre).estado || "Activo")}</td><td>${asistio ? "Asistió" : "Faltó"}</td><td>${asistio ? escaparTexto(registro?.Comportamiento || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Participacion || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Desarrollo || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Observaciones || "-") : "-"}</td></tr>`;
+  }).join("");
+  const datosClase = obtenerDatosClase(salon, fecha);
+  document.getElementById("contenidoResumenClase").innerHTML = `
+    <div class="resumen-datos">
+      <div class="resumen-dato">Niños<strong>${lideres.length}</strong></div>
+      <div class="resumen-dato">Asistieron<strong>${asistentes}</strong></div>
+      <div class="resumen-dato">Faltaron<strong>${lideres.length - asistentes}</strong></div>
+      <div class="resumen-dato">Registros guardados<strong>${registros.length}</strong></div>
+    </div>
+    <div class="tabla-scroll"><table class="tabla-resumen">
+      <tr><th>Niño</th><th>Estado</th><th>Asistencia</th><th>Comportamiento</th><th>Participación</th><th>Desarrollo</th><th>Observaciones</th></tr>
+      ${filas || "<tr><td colspan=\"7\">No hay niños registrados en este salón.</td></tr>"}
+    </table></div>
+    <div class="resumen-dato">Comentario de la clase<strong>${escaparTexto(datosClase?.Comentario || "Sin comentario")}</strong></div>
+    ${mostrarMultimediaClase(datosClase)}
+  `;
+}
+
+function mostrarCalendarioCumpleanos() {
+  const mesTexto = document.getElementById("mesCumpleanos").value;
+  const mes = Number(mesTexto);
+  const primerDia = new Date(2024, mes - 1, 1).getDay();
+  const diasDelMes = new Date(2024, mes, 0).getDate();
+  const porDia = {};
+  obtenerNinosConCumpleanos().filter(nino => Number(nino.cumpleanos.split("-")[0]) === mes)
+    .forEach(nino => {
+      const dia = Number(nino.cumpleanos.split("-")[1]);
+      (porDia[dia] ||= []).push(nino);
+    });
+  const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  let html = `<div class="calendario-cumpleanos">${dias.map(dia => `<div class="dia-semana">${dia}</div>`).join("")}`;
+  for (let indice = 0; indice < primerDia; indice++) html += '<div class="dia-cumpleanos vacio"></div>';
+  for (let dia = 1; dia <= diasDelMes; dia++) {
+    html += `<div class="dia-cumpleanos"><span class="numero-dia">${dia}</span>${(porDia[dia] || []).map(nino => `<span class="cumpleanero"><strong>${escaparTexto(nino.nombre)}</strong><br>${escaparTexto(nino.salon)}</span>`).join("")}</div>`;
+  }
+  document.getElementById("calendarioCumpleanos").innerHTML = `${html}</div>`;
+}
+
+function abrirCalendarioCumpleanos() {
+  document.getElementById("mesCumpleanos").value = String(new Date().getMonth() + 1).padStart(2, "0");
+  mostrarCalendarioCumpleanos();
+  document.getElementById("modalCumpleanos").classList.remove("oculto");
 }
 
     function cerrarResumenNino() {
@@ -1396,14 +2403,15 @@ async function cargarDatosDesdeAPI() {
     const estado = !registro
       ? "Sin registro"
       : registro.Asistencia === "Sí" ? "Asistió" : "Falta";
+    const puedeMostrarResultados = registro?.Asistencia === "Sí";
 
     return `
-      <tr>
+      <tr class="${registro?.Asistencia === "No" ? "fila-falta" : ""}">
         <td>${formatearFechaResumen(fecha)}</td>
         <td>${estado}</td>
-        <td>${registro ? escaparTexto(registro.Comportamiento || "-") : "-"}</td>
-        <td>${registro ? escaparTexto(registro.Participacion || "-") : "-"}</td>
-        <td>${registro ? escaparTexto(registro.Desarrollo || "-") : "-"}</td>
+        <td>${puedeMostrarResultados ? escaparTexto(registro.Comportamiento || "-") : "-"}</td>
+        <td>${puedeMostrarResultados ? escaparTexto(registro.Participacion || "-") : "-"}</td>
+        <td>${puedeMostrarResultados ? escaparTexto(registro.Desarrollo || "-") : "-"}</td>
       </tr>
     `;
   }).join("");
@@ -1413,6 +2421,8 @@ async function cargarDatosDesdeAPI() {
     <p>Periodo: ${formatearFechaResumen(desde)} al ${formatearFechaResumen(hasta)}</p>
 
     <div class="resumen-datos">
+      <div class="resumen-dato">Cumpleaños<strong>${obtenerDatosNino(salon, nino).cumpleanos ? nombreMesCumpleanos(obtenerDatosNino(salon, nino).cumpleanos) : "Sin registrar"}</strong></div>
+      <div class="resumen-dato">Estado<strong>${escaparTexto(obtenerDatosNino(salon, nino).estado || "Activo")}</strong></div>
       <div class="resumen-dato">Domingos del periodo<strong>${domingos.length}</strong></div>
       <div class="resumen-dato">Asistencias<strong>${asistenciasContadas}</strong></div>
       <div class="resumen-dato">Faltas<strong>${faltasContadas}</strong></div>
@@ -1540,6 +2550,10 @@ let ninoPendiente = null;
       document.getElementById("nombreNinoCambioTexto").textContent =
         `Nombre actual: ${nombreAnterior}`;
       document.getElementById("nombreNinoModal").value = nombreAnterior;
+      document.getElementById("cumpleanosNinoModal").value =
+        formatearCumpleanosEntrada(obtenerDatosNino(salon, nombreAnterior).cumpleanos);
+      document.getElementById("estadoNinoModal").value =
+        obtenerDatosNino(salon, nombreAnterior).estado || "Activo";
       document.getElementById("modalNombreNino").classList.remove("oculto");
     }
 
@@ -1550,13 +2564,24 @@ let ninoPendiente = null;
 
       const nuevoNombre = document.getElementById("nombreNinoModal")
         .value.trim();
+      const nuevoCumpleanos = normalizarCumpleanos(
+        document.getElementById("cumpleanosNinoModal").value
+      );
+      const nuevoEstado = document.getElementById("estadoNinoModal").value;
 
       if (!nuevoNombre) {
         alert("El nombre no puede estar vacío.");
         return;
       }
 
+      const nombreAnterior = ninos[ninoPendiente.salon][ninoPendiente.indice];
+      delete datosNinos[claveNino(ninoPendiente.salon, nombreAnterior)];
       ninos[ninoPendiente.salon][ninoPendiente.indice] = nuevoNombre;
+      datosNinos[claveNino(ninoPendiente.salon, nuevoNombre)] = {
+        cumpleanos: nuevoCumpleanos,
+        estado: nuevoEstado
+      };
+      guardarDatosNinos();
       ordenarNinos(ninoPendiente.salon);
       guardarNinos();
       cerrarModal("modalNombreNino");
@@ -1651,8 +2676,14 @@ function cerrarModal(id) {
 
   document.getElementById("modalUsuarios").classList.add("oculto");
   document.getElementById("modalResumenNino").classList.add("oculto");
+  document.getElementById("modalResumenClase").classList.add("oculto");
+  document.getElementById("modalCumpleanos").classList.add("oculto");
+  document.getElementById("modalAnuncios").classList.add("oculto");
+  document.getElementById("modalConfirmacionAnuncio").classList.add("oculto");
+  document.getElementById("cintaCumpleanosSistema").classList.remove("visible");
   document.getElementById("botonAdministrarUsuarios").classList.add("oculto");
   document.getElementById("botonResumenNino").classList.add("oculto");
+  document.getElementById("botonResumenClase").classList.add("oculto");
 
   document.getElementById("salon").disabled = false;
   document.getElementById("salonNuevoNino").disabled = false;
