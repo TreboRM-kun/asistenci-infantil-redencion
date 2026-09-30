@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asistencias - Iglesia Infantil Redención</title>
+  <meta name="theme-color" content="#174ea6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="src/img/lg.png">
+  <link rel="apple-touch-icon" href="src/img/app-icon-192.png">
 
   <style>
     * {
@@ -77,6 +82,16 @@
       width: 90%;
     }
 
+    .boton-instalar {
+      display: block;
+      margin: 6px auto;
+      background: #16803c;
+    }
+
+    .boton-instalar:hover {
+      background: #11632e;
+    }
+
     .cinta {
       display: none;
       width: 100%;
@@ -138,7 +153,7 @@
     .anuncio-multimedia {
       display: block;
       max-width: 100%;
-      max-height: 300px;
+      max-height: 420px;
       margin: 10px auto 0;
       object-fit: contain;
     }
@@ -561,6 +576,75 @@
       cursor: zoom-in;
     }
 
+    .anuncios-inicio {
+      max-width: 1250px;
+      margin-top: 18px;
+    }
+
+    .lista-anuncios-inicio {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .lista-anuncios-inicio > p {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    .anuncio-inicio {
+      min-width: 0;
+      padding: 18px;
+      border-left: 5px solid #e3a008;
+      border-radius: 8px;
+      background: #e8f5e9;
+      overflow-wrap: anywhere;
+    }
+
+    .lista-anuncios-inicio.una-columna .anuncio-inicio {
+      grid-column: 1 / -1;
+    }
+
+    .anuncio-inicio .anuncio-cabecera h3 {
+      margin: 0;
+    }
+
+    .anuncio-inicio .anuncio-multimedia {
+      width: 100%;
+      max-height: 520px;
+    }
+
+    .visor-multimedia {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: min(1100px, 95vw);
+      max-height: 92vh;
+      padding: 48px 18px 18px;
+      border-radius: 12px;
+      background: #1e293b;
+    }
+
+    #contenidoMultimedia {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      max-height: calc(92vh - 66px);
+    }
+
+    #contenidoMultimedia img,
+    #contenidoMultimedia video {
+      max-width: 100%;
+      max-height: calc(92vh - 66px);
+      object-fit: contain;
+    }
+
+    #contenidoMultimedia audio {
+      width: min(700px, 85vw);
+    }
+
     .cinta-anuncios {
       border-color: #174ea6;
       background: #174ea6;
@@ -576,6 +660,14 @@
     }
 
     @media (max-width: 600px) {
+      .lista-anuncios-inicio {
+        grid-template-columns: 1fr;
+      }
+
+      .lista-anuncios-inicio .anuncio-inicio {
+        grid-column: 1 / -1;
+      }
+
       .datos-clase {
         grid-template-columns: 1fr;
       }
@@ -809,9 +901,14 @@
     <br>
 
     <button id="botonIngresar" onclick="iniciarSesion()">Ingresar</button>
+    <button id="botonInstalar" class="boton-instalar" type="button" onclick="instalarAplicacion()">Instalar aplicación</button>
 
     <p id="mensajeLogin" class="mensaje"></p>
-    <div id="cintaAnunciosLogin" class="cinta" aria-live="polite"></div>
+  </section>
+
+  <section class="contenedor anuncios-inicio">
+    <h2>Anuncios</h2>
+    <div id="listaAnunciosInicio" class="lista-anuncios-inicio"></div>
   </section>
 
   <section id="pantallaSistema" class="contenedor oculto">
@@ -878,7 +975,7 @@
 
       <label for="cumpleanosNino">Cumpleaños:</label>
       <input id="cumpleanosNino" type="text" inputmode="numeric"
-        placeholder="DD/MM" pattern="[0-9]{1,2}[/-][0-9]{1,2}"
+        placeholder="DD/MM" pattern="(?:[0-9]{1,2}/[0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2})"
         aria-label="Cumpleaños del niño, día y mes"
         onblur="this.value = formatearCumpleanosEntrada(this.value)">
 
@@ -1082,7 +1179,7 @@
 
     <label for="cumpleanosNinoModal">Cumpleaños:</label>
     <input id="cumpleanosNinoModal" type="text" inputmode="numeric"
-      placeholder="DD/MM" pattern="[0-9]{1,2}[/-][0-9]{1,2}"
+      placeholder="DD/MM" pattern="(?:[0-9]{1,2}/[0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2})"
       onblur="this.value = formatearCumpleanosEntrada(this.value)">
 
     <label for="estadoNinoModal">Estado:</label>
@@ -1163,6 +1260,14 @@
   </div>
 </div>
   </section>
+
+  <div id="modalMultimedia" class="modal oculto"
+       onclick="if (event.target === this) cerrarModal('modalMultimedia')">
+    <div class="visor-multimedia">
+      <button class="cerrar-modal" onclick="cerrarModal('modalMultimedia')">×</button>
+      <div id="contenidoMultimedia"></div>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -1468,8 +1573,10 @@ async function cargarDatosDesdeAPI() {
     ) || [];
 
     let usuarioActual = null;
+    let instalacionPendiente = null;
 
     document.addEventListener("DOMContentLoaded", () => {
+      prepararInstalacion();
       const fecha = document.getElementById("fecha");
       fecha.value = obtenerDomingoAnterior();
 
@@ -1490,6 +1597,49 @@ async function cargarDatosDesdeAPI() {
       cargarDatosDesdeAPI();
       mostrarAnunciosLogin();
     });
+
+    function prepararInstalacion() {
+      const boton = document.getElementById("botonInstalar");
+      if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+        boton.classList.add("oculto");
+      }
+
+      window.addEventListener("beforeinstallprompt", evento => {
+        evento.preventDefault();
+        instalacionPendiente = evento;
+        boton.classList.remove("oculto");
+      });
+
+      window.addEventListener("appinstalled", () => {
+        instalacionPendiente = null;
+        boton.classList.add("oculto");
+      });
+
+      if ("serviceWorker" in navigator && window.isSecureContext) {
+        navigator.serviceWorker.register("./service-worker.js")
+          .catch(error => console.error("No se pudo preparar la instalación de la aplicación.", error));
+      }
+    }
+
+    async function instalarAplicacion() {
+      if (instalacionPendiente) {
+        instalacionPendiente.prompt();
+        const resultado = await instalacionPendiente.userChoice;
+        instalacionPendiente = null;
+        if (resultado.outcome === "accepted") {
+          document.getElementById("botonInstalar").classList.add("oculto");
+        }
+        return;
+      }
+
+      if (!window.isSecureContext) {
+        alert("Para instalar la aplicación, ábrala desde una dirección HTTPS o desde localhost. Los archivos abiertos directamente como file:// no se pueden instalar desde el navegador.");
+      } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        alert("Para instalar la aplicación, toque Compartir y seleccione «Agregar a pantalla de inicio».");
+      } else {
+        alert("Si el navegador todavía no muestra la instalación, abra su menú y seleccione «Instalar aplicación» o «Agregar a pantalla de inicio».");
+      }
+    }
 
     function obtenerDomingoAnterior(fechaTexto) {
       const fecha = fechaTexto
@@ -1625,12 +1775,12 @@ async function cargarDatosDesdeAPI() {
         function abrirMultimediaDesdeElemento(evento, elemento) {
           evento.preventDefault();
           evento.stopPropagation();
-          const ventana = window.open("", "_blank", "width=900,height=700,resizable=yes,scrollbars=yes");
-          if (!ventana) return;
           const fuente = escaparTexto(elemento.currentSrc || elemento.src);
           const tipo = elemento.tagName === "VIDEO" ? "video" : elemento.tagName === "AUDIO" ? "audio" : "img";
-          ventana.document.write(`<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>Archivo multimedia</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#1e293b}img,video{max-width:95vw;max-height:90vh}audio{width:min(700px,90vw)}</style></head><body><${tipo} src="${fuente}" ${tipo !== "img" ? "controls autoplay" : ""}></${tipo}><\/body></html>`);
-          ventana.document.close();
+          const atributos = tipo === "img" ? 'alt="Archivo multimedia ampliado"' : "controls autoplay";
+          document.getElementById("contenidoMultimedia").innerHTML =
+            `<${tipo} src="${fuente}" ${atributos}></${tipo}>`;
+          document.getElementById("modalMultimedia").classList.remove("oculto");
         }
 
     function iniciarSesion() {
@@ -1650,6 +1800,7 @@ async function cargarDatosDesdeAPI() {
       };
 
       document.getElementById("pantallaLogin").classList.add("oculto");
+      document.querySelector(".anuncios-inicio").classList.add("oculto");
       document.getElementById("pantallaSistema").classList.remove("oculto");
 
       document.getElementById("informacionUsuario").textContent =
@@ -2074,19 +2225,62 @@ function textoAnuncio(anuncio) {
 
 function formatearFechaAnuncio(fechaTexto) {
   if (!fechaTexto) return "";
-  const [ano, mes, dia] = fechaTexto.split("-");
-  return `${dia}/${mes}`;
+
+  let fecha;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(fechaTexto))) {
+    fecha = new Date(`${fechaTexto}T00:00:00`);
+  } else {
+    fecha = new Date(Number(fechaTexto));
+  }
+
+  if (Number.isNaN(fecha.getTime())) return "";
+
+  return fecha.toLocaleDateString("es-MX", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
 }
 
 function ordenarAnuncios(lista) {
-  return [...lista].sort((a, b) =>
-    (a.Rol === "Administrador" ? 0 : 1) - (b.Rol === "Administrador" ? 0 : 1) ||
-    Number(b.Fecha || 0) - Number(a.Fecha || 0)
-  );
+  return [...lista].sort((a, b) => {
+    const fechaA = a.FechaLimite ? Date.parse(`${a.FechaLimite}T00:00:00`) : Infinity;
+    const fechaB = b.FechaLimite ? Date.parse(`${b.FechaLimite}T00:00:00`) : Infinity;
+    return (fechaA - fechaB) ||
+      (a.Rol === "Administrador" ? 0 : 1) - (b.Rol === "Administrador" ? 0 : 1) ||
+      Number(b.Fecha || 0) - Number(a.Fecha || 0);
+  });
 }
 
 function mostrarAnunciosLogin() {
-  mostrarCinta("cintaAnunciosLogin", ordenarAnuncios(anuncios.filter(anuncioVigente)).map(textoAnuncio));
+  const lista = document.getElementById("listaAnunciosInicio");
+  if (!lista) return;
+
+  const vigentes = ordenarAnuncios(anuncios.filter(anuncioVigente));
+
+  lista.classList.toggle("una-columna", vigentes.length === 1);
+
+  lista.innerHTML = vigentes.map(anuncio => {
+    const fecha = anuncio.FechaLimite || anuncio.Fecha;
+    const multimedia = anuncio.MediaTipo?.startsWith("image/")
+      ? `<img class="anuncio-multimedia multimedia-ampliable" src="${escaparTexto(anuncio.MediaData)}" alt="Imagen del anuncio" onclick="abrirMultimediaDesdeElemento(event, this)">`
+      : anuncio.MediaTipo?.startsWith("video/")
+        ? `<video class="anuncio-multimedia multimedia-ampliable" controls preload="metadata" src="${escaparTexto(anuncio.MediaData)}" onclick="abrirMultimediaDesdeElemento(event, this)"></video>`
+        : anuncio.MediaTipo?.startsWith("audio/")
+          ? `<audio class="anuncio-multimedia multimedia-ampliable" controls src="${escaparTexto(anuncio.MediaData)}" onclick="abrirMultimediaDesdeElemento(event, this)"></audio>`
+          : "";
+
+    return `
+      <article class="anuncio-inicio">
+        <div class="anuncio-cabecera">
+          <h3>${escaparTexto(anuncio.Titulo || "Anuncio")}</h3>
+          ${fecha ? `<span class="anuncio-fecha">${formatearFechaAnuncio(fecha)}</span>` : ""}
+        </div>
+        <div>${escaparTexto(anuncio.Texto || "")}</div>
+        ${multimedia}
+      </article>
+    `;
+  }).join("") || "<p>No hay anuncios publicados.</p>";
 }
 
 function anuncioVigente(anuncio) {
@@ -2108,7 +2302,7 @@ function mostrarTarjetaAnuncio(anuncio, indice, pasado = false) {
       <span>${escaparTexto(anuncio.Texto)}</span>
       ${anuncio.MediaTipo?.startsWith("image/") ? `<img class="anuncio-multimedia multimedia-ampliable" src="${escaparTexto(anuncio.MediaData)}" alt="Imagen del anuncio" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)">` : ""}
       ${anuncio.MediaTipo?.startsWith("video/") ? `<video class="anuncio-multimedia multimedia-ampliable" controls preload="metadata" src="${escaparTexto(anuncio.MediaData)}" title="Abrir archivo" onclick="abrirMultimediaDesdeElemento(event, this)"></video>` : ""}
-      <small>${escaparTexto(anuncio.Autor || "Usuario")} ${anuncio.Rol === "Administrador" ? "· Prioridad administrativa" : ""}</small>
+      ${anuncio.Rol === "Administrador" ? "<small>Prioridad administrativa</small>" : ""}
       ${usuarioActual?.rol === "Administrador" ? `<button onclick="editarAnuncio(${indice})">Modificar anuncio</button><button class="boton-eliminar-anuncio boton-rojo" onclick="confirmarEliminarAnuncio(${indice})">Eliminar anuncio</button>` : ""}
     </div>
   `;
@@ -2270,7 +2464,15 @@ function mostrarResumenClase() {
   const filas = lideres.map(nombre => {
     const registro = registrosPorNombre[nombre];
     const asistio = registro?.Asistencia === "Sí";
-    return `<tr class="${registro && !asistio ? "fila-falta" : ""}"><td>${escaparTexto(nombre)}</td><td>${escaparTexto(obtenerDatosNino(salon, nombre).estado || "Activo")}</td><td>${asistio ? "Asistió" : "Faltó"}</td><td>${asistio ? escaparTexto(registro?.Comportamiento || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Participacion || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Desarrollo || "-") : "-"}</td><td>${asistio ? escaparTexto(registro?.Observaciones || "-") : "-"}</td></tr>`;
+    return `<tr class="${registro && !asistio ? "fila-falta" : ""}">
+        <td>${escaparTexto(nombre)}</td>
+        <td>${escaparTexto(obtenerDatosNino(salon, nombre).estado || "Activo")}</td>
+        <td>${asistio ? "Asistió" : "Faltó"}</td>
+        <td>${asistio ? escaparTexto(registro?.Comportamiento || "-") : "-"}</td>
+        <td>${asistio ? escaparTexto(registro?.Participacion || "-") : "-"}</td>
+        <td>${asistio ? escaparTexto(registro?.Desarrollo || "-") : "-"}</td>
+        <td>${asistio ? escaparTexto(registro?.Observaciones || "-") : "-"}</td>
+      </tr>`;
   }).join("");
   const datosClase = obtenerDatosClase(salon, fecha);
   document.getElementById("contenidoResumenClase").innerHTML = `
@@ -2280,10 +2482,20 @@ function mostrarResumenClase() {
       <div class="resumen-dato">Faltaron<strong>${lideres.length - asistentes}</strong></div>
       <div class="resumen-dato">Registros guardados<strong>${registros.length}</strong></div>
     </div>
-    <div class="tabla-scroll"><table class="tabla-resumen">
-      <tr><th>Niño</th><th>Estado</th><th>Asistencia</th><th>Comportamiento</th><th>Participación</th><th>Desarrollo</th><th>Observaciones</th></tr>
-      ${filas || "<tr><td colspan=\"7\">No hay niños registrados en este salón.</td></tr>"}
-    </table></div>
+    <div class="tabla-scroll">
+      <table class="tabla-resumen">
+        <tr>
+          <th>Niño</th>
+          <th>Estado</th>
+          <th>Asistencia</th>
+          <th>Comportamiento</th>
+          <th>Participación</th>
+          <th>Desarrollo</th>
+          <th>Observaciones</th>
+        </tr>
+        ${filas || "<tr><td colspan=\"7\">No hay niños registrados en este salón.</td></tr>"}
+      </table>
+    </div>
     <div class="resumen-dato">Comentario de la clase<strong>${escaparTexto(datosClase?.Comentario || "Sin comentario")}</strong></div>
     ${mostrarMultimediaClase(datosClase)}
   `;
@@ -2292,8 +2504,9 @@ function mostrarResumenClase() {
 function mostrarCalendarioCumpleanos() {
   const mesTexto = document.getElementById("mesCumpleanos").value;
   const mes = Number(mesTexto);
-  const primerDia = new Date(2024, mes - 1, 1).getDay();
-  const diasDelMes = new Date(2024, mes, 0).getDate();
+  const anioActual = new Date().getFullYear();
+  const primerDia = new Date(anioActual, mes - 1, 1).getDay();
+  const diasDelMes = new Date(anioActual, mes, 0).getDate();
   const porDia = {};
   obtenerNinosConCumpleanos().filter(nino => Number(nino.cumpleanos.split("-")[0]) === mes)
     .forEach(nino => {
@@ -2662,6 +2875,9 @@ function mostrarExito(mensaje) {
 
 function cerrarModal(id) {
   document.getElementById(id).classList.add("oculto");
+  if (id === "modalMultimedia") {
+    document.getElementById("contenidoMultimedia").innerHTML = "";
+  }
 }
 
     function cerrarSesion() {
@@ -2669,6 +2885,7 @@ function cerrarModal(id) {
 
   document.getElementById("pantallaSistema").classList.add("oculto");
   document.getElementById("pantallaLogin").classList.remove("oculto");
+  document.querySelector(".anuncios-inicio").classList.remove("oculto");
 
   document.getElementById("usuario").value = "";
   document.getElementById("contrasena").value = "";
@@ -2688,7 +2905,6 @@ function cerrarModal(id) {
   document.getElementById("salon").disabled = false;
   document.getElementById("salonNuevoNino").disabled = false;
 }
-  </script>
-
+</script>
 </body>
 </html>
