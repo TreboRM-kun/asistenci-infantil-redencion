@@ -453,6 +453,12 @@
       background: white;
     }
 
+    .dia-cumpleanos.otro-mes {
+      background: #d9e1eb;
+      color: #475569;
+      opacity: 1;
+    }
+
     .numero-dia {
       display: block;
       margin-bottom: 5px;
@@ -524,35 +530,97 @@
 
     .ventana-clase .tabla-resumen {
       min-width: 1050px;
-      table-layout: fixed;
+      table-layout: auto;
     }
 
-    .ventana-clase .tabla-resumen th:nth-child(1),
-    .ventana-clase .tabla-resumen td:nth-child(1) {
-      width: 20%;
+    .ventana-clase .tabla-resumen th.col-salon,
+    .ventana-clase .tabla-resumen td.col-salon,
+    .ventana-clase .tabla-resumen th.col-nino,
+    .ventana-clase .tabla-resumen td.col-nino {
+      width: 1%;
       white-space: nowrap;
     }
 
-    .ventana-clase .tabla-resumen th:nth-child(2),
-    .ventana-clase .tabla-resumen td:nth-child(2) { width: 11%; }
-
-    .ventana-clase .tabla-resumen th:nth-child(3),
-    .ventana-clase .tabla-resumen td:nth-child(3) { width: 12%; }
-
-    .ventana-clase .tabla-resumen th:nth-child(4),
-    .ventana-clase .tabla-resumen td:nth-child(4) {
-      width: 18%;
+    .ventana-clase .tabla-resumen th {
       white-space: nowrap;
     }
 
-    .ventana-clase .tabla-resumen th:nth-child(5),
-    .ventana-clase .tabla-resumen td:nth-child(5) { width: 14%; }
+    .ventana-clase .tabla-resumen td:not(.col-observaciones) {
+      white-space: nowrap;
+    }
 
-    .ventana-clase .tabla-resumen th:nth-child(6),
-    .ventana-clase .tabla-resumen td:nth-child(6) { width: 14%; }
+    .ventana-clase .tabla-resumen th.col-observaciones,
+    .ventana-clase .tabla-resumen td.col-observaciones {
+      min-width: 140px;
+      max-width: 340px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
 
-    .ventana-clase .tabla-resumen th:nth-child(7),
-    .ventana-clase .tabla-resumen td:nth-child(7) { width: 25%; }
+    .asistencia-por-salon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr));
+      align-items: center;
+      gap: 5px 10px;
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .resumen-datos > .resumen-dato:nth-child(2) {
+      container-type: inline-size;
+    }
+
+    .asistencia-por-salon > span {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .asistencia-por-salon > span > span {
+      display: inline;
+    }
+
+    .asistencia-por-salon .conteo-asistencia {
+      display: inline;
+      color: #174ea6;
+      font-size: inherit;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .asistencia-por-salon .asistencia-cero {
+      color: #dc2626;
+    }
+
+    .asistencia-por-salon .asistencia-total {
+      font-weight: bold;
+    }
+
+    @container (max-width: 440px) {
+      .asistencia-por-salon {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 12px;
+      }
+
+      .asistencia-por-salon > span {
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        min-width: 0;
+        text-align: center;
+      }
+
+      .asistencia-por-salon > span > span:first-child {
+        font-size: 16px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .asistencia-por-salon .conteo-asistencia {
+        font-size: 20px;
+      }
+    }
 
     .anuncio-cabecera {
       display: flex;
@@ -659,6 +727,99 @@
       font-weight: bold;
     }
 
+    .perfil-nino {
+      display: grid;
+      place-items: center;
+      width: clamp(150px, 30vw, 220px);
+      aspect-ratio: 1;
+      margin: 12px auto;
+      padding: 0;
+      overflow: hidden;
+      border: 4px solid #174ea6;
+      border-radius: 50%;
+      background: #e8f5e9;
+      color: #174ea6;
+      cursor: pointer;
+    }
+
+    .perfil-nino img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .perfil-nino.tiene-foto img {
+      display: block;
+    }
+
+    .perfil-nino.tiene-foto svg {
+      display: none;
+    }
+
+    .perfil-nino svg {
+      width: 58%;
+      height: 58%;
+      fill: currentColor;
+    }
+
+    .foto-nino-cambiar {
+      width: auto !important;
+      margin: 0 0 12px !important;
+    }
+
+    #fotoNinoPerfil {
+      width: clamp(150px, 30vw, 220px);
+      padding: 0;
+    }
+
+    .foto-cumpleanero {
+      display: block;
+      width: 48px;
+      height: 48px;
+      margin: 5px auto 0;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: zoom-in;
+    }
+
+    .dia-cumpleanos {
+      width: 100%;
+      color: inherit;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .dia-cumpleanos:hover,
+    .dia-cumpleanos:focus-visible {
+      outline: 2px solid #174ea6;
+      outline-offset: 1px;
+    }
+
+    .ventana-cumpleanos-dia {
+      max-width: 620px;
+    }
+
+    .cumpleanero-dia {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 12px 0;
+      padding: 12px;
+      border-left: 4px solid #e3a008;
+      border-radius: 8px;
+      background: #e8f5e9;
+      text-align: left;
+    }
+
+    .cumpleanero-dia .foto-cumpleanero {
+      width: 78px;
+      height: 78px;
+      flex: 0 0 auto;
+      margin: 0;
+    }
+
     @media (max-width: 600px) {
       .lista-anuncios-inicio {
         grid-template-columns: 1fr;
@@ -713,6 +874,64 @@
   gap: 10px;
 }
 
+.acciones-barra .boton-icono {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  margin: 0;
+  background: #174ea6;
+  color: white;
+}
+
+.acciones-barra .boton-icono.oculto {
+  display: none;
+}
+
+.acciones-barra .boton-icono:hover,
+.acciones-barra .boton-icono:focus-visible {
+  background: #11632e;
+}
+
+.acciones-barra .boton-icono svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.acciones-barra .boton-icono[data-tooltip]::after {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  z-index: 100;
+  width: max-content;
+  max-width: 220px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  background: #171717;
+  color: white;
+  content: attr(data-tooltip);
+  font-size: 13px;
+  font-weight: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-3px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.acciones-barra .boton-icono:hover::after,
+.acciones-barra .boton-icono:focus-visible::after,
+.acciones-barra .boton-icono:focus::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -758,6 +977,15 @@
       max-width: 1250px;
     }
 
+    .detalle-resumen-clase {
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .detalle-resumen-clase h3 {
+      margin: 12px 0 6px;
+    }
+
     .ventana-cumpleanos {
       max-width: 1250px;
     }
@@ -787,10 +1015,86 @@
   background: #f8fafc;
 }
 
+.resumen-datos > .resumen-dato:nth-child(-n + 2) {
+  text-align: center;
+}
+
 .resumen-dato strong {
   display: block;
   color: #174ea6;
   font-size: 20px;
+}
+
+.foto-nino-resumen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+  border: 3px solid #174ea6;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.encabezado-resumen-nino {
+  --foto-resumen-tamano: clamp(108px, 9vw, 124px);
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  column-gap: 10px;
+  margin: 12px 0 0;
+  text-align: left;
+}
+
+.encabezado-resumen-nino + .resumen-datos {
+  margin-top: 8px;
+}
+
+.foto-resumen-contenedor {
+  width: var(--foto-resumen-tamano);
+  height: var(--foto-resumen-tamano);
+  margin-inline: auto;
+}
+
+.datos-encabezado-resumen {
+  display: flex;
+  min-height: var(--foto-resumen-tamano);
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.datos-encabezado-resumen h3,
+.datos-encabezado-resumen p {
+  margin: 0;
+}
+
+.fecha-cumpleanos-resumen {
+  color: #174ea6;
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  .encabezado-resumen-nino {
+    --foto-resumen-tamano: clamp(96px, 29vw, 130px);
+    column-gap: 10px;
+    font-size: 14px;
+  }
+
+  #modalResumenNino {
+    padding: 8px;
+  }
+
+  #modalResumenNino .ventana-resumen {
+    padding: 16px;
+  }
+
+  .fecha-cumpleanos-resumen {
+    font-size: 15px;
+  }
 }
 
 .tabla-resumen {
@@ -816,6 +1120,20 @@
   display: block;
   width: 100%;
   margin: 8px 0;
+}
+
+.ventana-usuarios input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+  margin: 8px;
+}
+
+.ventana-usuarios input.oculto {
+  display: none;
+}
+
+.ventana-usuarios textarea {
+  width: 100%;
 }
 
 .ventana-usuarios button:not(.cerrar-modal) {
@@ -906,12 +1224,13 @@
     <p id="mensajeLogin" class="mensaje"></p>
   </section>
 
-  <section class="contenedor anuncios-inicio">
+  <section class="contenedor anuncios-inicio oculto">
     <h2>Anuncios</h2>
     <div id="listaAnunciosInicio" class="lista-anuncios-inicio"></div>
   </section>
 
   <section id="pantallaSistema" class="contenedor oculto">
+    <div id="cintaCumpleanosSistema" class="cinta" aria-live="polite"></div>
 
     <div class="barra">
       <div class="titulo-pagina">
@@ -923,28 +1242,46 @@
       </div>
 
       <div class="acciones-barra">
-        <button id="botonAdministrarUsuarios"
-          class="boton-editar oculto"
-          onclick="abrirAdministrarUsuarios()">
-          Administrar usuarios
-        </button>
-
         <button id="botonResumenNino"
-          class="oculto"
+          class="boton-icono oculto" type="button"
+          aria-label="Resumen del niño" title="Resumen del niño"
+          data-tooltip="Resumen del niño"
           onclick="abrirResumenNino()">
-          Resumen del niño
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 8h4M17 12h4M17 16h4"></path></svg>
         </button>
 
         <button id="botonResumenClase"
-          class="oculto"
+          class="boton-icono oculto" type="button"
+          aria-label="Resumen de la clase" title="Resumen de la clase"
+          data-tooltip="Resumen de la clase"
           onclick="abrirResumenClase()">
-          Resumen de la clase
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"></path></svg>
         </button>
 
-        <button onclick="abrirCalendarioCumpleanos()">Cumpleaños</button>
-        <button onclick="abrirAnuncios()">Anuncios</button>
+        <button class="boton-icono" type="button" aria-label="Cumpleaños"
+          title="Cumpleaños" data-tooltip="Cumpleaños"
+          onclick="abrirCalendarioCumpleanos()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01M16 17h.01"></path></svg>
+        </button>
+        <button class="boton-icono" type="button" aria-label="Anuncios"
+          title="Anuncios" data-tooltip="Anuncios"
+          onclick="abrirAnuncios()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14V9a2 2 0 0 1 2-2h3l9-4v17l-9-4H6a2 2 0 0 1-2-2ZM9 16l2 5h4l-3-6M18 9a4 4 0 0 1 0 5"></path></svg>
+        </button>
 
-        <button onclick="cerrarSesion()">Cerrar sesión</button>
+        <button id="botonAdministrarUsuarios"
+          class="boton-icono boton-editar oculto" type="button"
+          aria-label="Administrar usuarios" title="Administrar usuarios"
+          data-tooltip="Administrar usuarios"
+          onclick="abrirAdministrarUsuarios()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 8a3 3 0 0 1 0 6M17 16a5 5 0 0 1 4 4"></path></svg>
+        </button>
+
+        <button class="boton-icono" type="button" aria-label="Cerrar sesión"
+          title="Cerrar sesión" data-tooltip="Cerrar sesión"
+          onclick="cerrarSesion()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5M15 16l4-4-4-4M19 12H9"></path></svg>
+        </button>
       </div>
     </div>
 
@@ -990,7 +1327,6 @@
     </div>
 
     <div id="tablaAsistencia"></div>
-    <div id="cintaCumpleanosSistema" class="cinta" aria-live="polite"></div>
 
 
       <div id="modalResumenClase" class="modal oculto">
@@ -1004,6 +1340,7 @@
             <option value="Semillas">Semillas</option>
             <option value="Plantas">Plantas</option>
             <option value="Arboles">Árboles</option>
+            <option value="todos">Todos los salones</option>
           </select>
         </div>
         <div>
@@ -1031,6 +1368,14 @@
         <button class="cerrar-modal" onclick="cerrarModal('modalCumpleanos')">×</button>
       </div>
       <div id="calendarioCumpleanos"></div>
+    </div>
+  </div>
+
+  <div id="modalCumpleanosDia" class="modal oculto">
+    <div class="ventana-usuarios ventana-cumpleanos-dia">
+      <button class="cerrar-modal" onclick="cerrarModal('modalCumpleanosDia')">×</button>
+      <h2 id="tituloCumpleanosDia">Cumpleaños del día</h2>
+      <div id="listaCumpleanosDia"></div>
     </div>
   </div>
 
@@ -1170,14 +1515,40 @@
   <div class="ventana-usuarios">
     <button class="cerrar-modal" onclick="cerrarModal('modalNombreNino')">×</button>
 
-    <h2>Modificar nombre del niño</h2>
+      <h2>Modificar datos del niño</h2>
     <p id="nombreNinoCambioTexto"></p>
 
-    <input id="nombreNinoModal"
-      type="text"
-      placeholder="Nombre completo del niño">
+      <button id="fotoNinoPerfil" class="perfil-nino" type="button"
+        title="Abrir o seleccionar foto del niño" onclick="abrirFotoNino()">
+        <img id="fotoNinoPrevia" alt="Foto del niño">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5.2 0-9 2.7-9 6v2h18v-2c0-3.3-3.8-6-9-6Z" />
+        </svg>
+      </button>
+      <input id="fotoNinoArchivo" class="oculto" type="file" accept="image/*"
+        onchange="cargarFotoNino(this.files[0])">
+      <button class="foto-nino-cambiar" type="button"
+        onclick="document.getElementById('fotoNinoArchivo').click()">Cambiar foto</button>
 
-    <label for="cumpleanosNinoModal">Cumpleaños:</label>
+      <input id="nombreNinoModal"
+        type="text"
+        placeholder="Nombre completo del niño">
+
+      <label for="representanteNinoModal">Nombre del representante:</label>
+      <input id="representanteNinoModal" type="text" placeholder="Nombre del representante">
+
+      <label for="telefonoRepresentanteModal">Teléfono del representante:</label>
+      <input id="telefonoRepresentanteModal" type="tel" inputmode="tel"
+        placeholder="Número de teléfono">
+
+      <label>
+        <input id="alergicoNinoModal" type="checkbox"
+          onchange="document.getElementById('alergiasNinoModal').disabled = !this.checked">
+        ¿Es alérgico?
+      </label>
+      <textarea id="alergiasNinoModal" placeholder="Indique a qué es alérgico" disabled></textarea>
+
+      <label for="cumpleanosNinoModal">Cumpleaños:</label>
     <input id="cumpleanosNinoModal" type="text" inputmode="numeric"
       placeholder="DD/MM" pattern="(?:[0-9]{1,2}/[0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2})"
       onblur="this.value = formatearCumpleanosEntrada(this.value)">
@@ -1189,7 +1560,7 @@
     </select>
 
     <button onclick="guardarNombreNino()">
-      Guardar nombre
+      Guardar datos
     </button>
 
     <button onclick="cerrarModal('modalNombreNino')">
@@ -1355,7 +1726,13 @@ function formatearCumpleanosEntrada(valor) {
 function obtenerDatosNino(salon, nombre) {
   return datosNinos[claveNino(salon, nombre)] || {
     cumpleanos: "",
-    estado: "Activo"
+    estado: "Activo",
+    representante: "",
+    telefonoRepresentante: "",
+    alergico: false,
+    alergias: "",
+    fotoData: "",
+    fotoTipo: ""
   };
 }
 
@@ -1365,27 +1742,66 @@ function guardarDatosNinos() {
 
 function actualizarEstadoNino(salon, nombre) {
   const clave = claveNino(salon, nombre);
-  datosNinos[clave] ||= { cumpleanos: "", estado: "Activo" };
-  const registros = asistencias
-    .filter(fila => String(fila.Salon) === salon && String(fila.Nombre) === nombre)
-    .sort((a, b) => String(b.Fecha).localeCompare(String(a.Fecha)));
+  const datos = datosNinos[clave] ||= { cumpleanos: "", estado: "Activo" };
+  const estadoAnterior = datos.estado || "Activo";
+  const semanasAnteriores = Number(datos.semanasSinAsistencia) || 0;
+  const ultimoDomingoAnterior = datos.ultimoDomingoEstado || "";
+  const inicioServicio = new Date("2026-09-20T00:00:00");
+  const fechaAlta = datos.fechaAlta
+    ? new Date(`${datos.fechaAlta}T00:00:00`)
+    : inicioServicio;
+  const fechaInicio = fechaAlta > inicioServicio ? fechaAlta : inicioServicio;
+  const fechaFin = new Date(`${obtenerDomingoAnterior()}T00:00:00`);
+  const registros = asistencias.filter(fila =>
+    String(fila.Salon) === salon && String(fila.Nombre) === nombre
+  );
+  const manualFecha = datos.estadoManualFecha
+    ? new Date(`${datos.estadoManualFecha}T00:00:00`)
+    : null;
+  let estado = "Activo";
+  let semanasSinAsistencia = 0;
+  let domingo = new Date(fechaInicio);
+  if (fechaAlta > inicioServicio) {
+    domingo.setDate(domingo.getDate() + 7);
+  }
 
-  if (!registros.length) return;
+  if (manualFecha && manualFecha >= fechaInicio && manualFecha <= fechaFin) {
+    estado = datos.estadoManual || estadoAnterior;
+    semanasSinAsistencia = 0;
+    if (domingo <= manualFecha) {
+      domingo = new Date(manualFecha);
+      domingo.setDate(domingo.getDate() + 7);
+    }
+  }
 
-  const ultimosTres = registros.slice(0, 3);
-  const tieneTresFaltas = ultimosTres.length === 3 &&
-    ultimosTres.every(fila => fila.Asistencia === "No");
+  while (domingo <= fechaFin) {
+    const fechaTexto = domingo.toISOString().slice(0, 10);
+    const registro = registros.find(fila => String(fila.Fecha) === fechaTexto);
+    if (registro?.Asistencia === "Sí") {
+      estado = "Activo";
+      semanasSinAsistencia = 0;
+    } else {
+      semanasSinAsistencia++;
+      if (semanasSinAsistencia >= 3) estado = "Inactivo";
+    }
+    domingo.setDate(domingo.getDate() + 7);
+  }
 
-  datosNinos[clave].estado = tieneTresFaltas
-    ? "Inactivo"
-    : registros.some(fila => fila.Asistencia === "Sí")
-      ? "Activo"
-      : datosNinos[clave].estado || "Activo";
+  datos.estado = estado;
+  datos.semanasSinAsistencia = semanasSinAsistencia;
+  datos.ultimoDomingoEstado = fechaFin.toISOString().slice(0, 10);
+  return estado !== estadoAnterior ||
+    semanasSinAsistencia !== semanasAnteriores ||
+    datos.ultimoDomingoEstado !== ultimoDomingoAnterior;
 }
 
 function actualizarEstadosNinos(salon) {
-  ninos[salon].forEach(nombre => actualizarEstadoNino(salon, nombre));
+  let cambiaronDatos = false;
+  ninos[salon].forEach(nombre => {
+    cambiaronDatos = actualizarEstadoNino(salon, nombre) || cambiaronDatos;
+  });
   guardarDatosNinos();
+  return cambiaronDatos;
 }
 
 async function leerHoja(nombreHoja) {
@@ -1395,6 +1811,56 @@ async function leerHoja(nombreHoja) {
   );
 
   return resultado.exists() ? Object.values(resultado.val()) : [];
+}
+
+function leerArchivoComoDataURL(archivo) {
+  return new Promise((resolver, rechazar) => {
+    const lector = new FileReader();
+    lector.onload = () => resolver(lector.result);
+    lector.onerror = () => rechazar(lector.error || new Error("No se pudo leer el archivo."));
+    lector.readAsDataURL(archivo);
+  });
+}
+
+async function prepararImagen(archivo, limiteBytes) {
+  if (archivo.size <= limiteBytes) {
+    return { tipo: archivo.type, datos: await leerArchivoComoDataURL(archivo) };
+  }
+
+  let imagen;
+  try {
+    imagen = await createImageBitmap(archivo);
+    let escala = Math.min(1, 2048 / Math.max(imagen.width, imagen.height));
+    const calidades = [0.88, 0.78, 0.68, 0.58];
+
+    for (let intento = 0; intento < 9; intento++) {
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(imagen.width * escala));
+      canvas.height = Math.max(1, Math.round(imagen.height * escala));
+      const contexto = canvas.getContext("2d");
+      if (!contexto) throw new Error("No se pudo preparar la compresión de la imagen.");
+      contexto.fillStyle = "#fff";
+      contexto.fillRect(0, 0, canvas.width, canvas.height);
+      contexto.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+      for (const calidad of calidades) {
+        const blob = await new Promise((resolver, rechazar) => {
+          canvas.toBlob(resultado => {
+            if (resultado) resolver(resultado);
+            else rechazar(new Error("El navegador no pudo comprimir la imagen."));
+          }, "image/jpeg", calidad);
+        });
+        if (blob.size <= limiteBytes) {
+          return { tipo: blob.type, datos: await leerArchivoComoDataURL(blob) };
+        }
+      }
+      escala *= 0.78;
+    }
+  } finally {
+    imagen?.close();
+  }
+
+  throw new Error("No fue posible comprimir la imagen al tamaño permitido.");
 }
 
 async function reemplazarHoja(nombreHoja, filas) {
@@ -1420,7 +1886,18 @@ function filasDeNinos() {
       Nombre: nombre,
       Salon: salon,
       Cumpleanos: obtenerDatosNino(salon, nombre).cumpleanos,
-      Estado: obtenerDatosNino(salon, nombre).estado
+      Estado: obtenerDatosNino(salon, nombre).estado,
+      SemanasSinAsistencia: Number(obtenerDatosNino(salon, nombre).semanasSinAsistencia) || 0,
+      UltimoDomingoEstado: obtenerDatosNino(salon, nombre).ultimoDomingoEstado || "",
+      EstadoManual: obtenerDatosNino(salon, nombre).estadoManual || "",
+      EstadoManualFecha: obtenerDatosNino(salon, nombre).estadoManualFecha || "",
+      FechaAlta: obtenerDatosNino(salon, nombre).fechaAlta || "",
+      Representante: obtenerDatosNino(salon, nombre).representante || "",
+      TelefonoRepresentante: obtenerDatosNino(salon, nombre).telefonoRepresentante || "",
+      Alergico: Boolean(obtenerDatosNino(salon, nombre).alergico),
+      Alergias: obtenerDatosNino(salon, nombre).alergias || "",
+      FotoData: obtenerDatosNino(salon, nombre).fotoData || "",
+      FotoTipo: obtenerDatosNino(salon, nombre).fotoTipo || ""
     }))
   );
 }
@@ -1460,7 +1937,18 @@ async function cargarDatosDesdeAPI() {
           ninos[fila.Salon].push(fila.Nombre);
           datosNinos[claveNino(fila.Salon, fila.Nombre)] = {
             cumpleanos: normalizarCumpleanos(fila.Cumpleanos || fila.cumpleanos),
-            estado: fila.Estado || fila.estado || "Activo"
+            estado: fila.Estado || fila.estado || "Activo",
+            semanasSinAsistencia: Number(fila.SemanasSinAsistencia ?? fila.semanasSinAsistencia) || 0,
+            ultimoDomingoEstado: fila.UltimoDomingoEstado || fila.ultimoDomingoEstado || "",
+            estadoManual: fila.EstadoManual || fila.estadoManual || "",
+            estadoManualFecha: fila.EstadoManualFecha || fila.estadoManualFecha || "",
+            fechaAlta: fila.FechaAlta || fila.fechaAlta || "",
+            representante: fila.Representante || fila.representante || "",
+            telefonoRepresentante: fila.TelefonoRepresentante || fila.telefonoRepresentante || "",
+            alergico: Boolean(fila.Alergico ?? fila.alergico),
+            alergias: fila.Alergias || fila.alergias || "",
+            fotoData: fila.FotoData || fila.fotoData || "",
+            fotoTipo: fila.FotoTipo || fila.fotoTipo || ""
           };
         }
       });
@@ -1490,7 +1978,13 @@ async function cargarDatosDesdeAPI() {
         "asistenciasRedencion",
         JSON.stringify(asistencias)
       );
-      Object.keys(ninos).forEach(salon => actualizarEstadosNinos(salon));
+    }
+    const estadosActualizados = Object.keys(ninos).reduce(
+      (cambiaron, salon) => actualizarEstadosNinos(salon) || cambiaron,
+      false
+    );
+    if (estadosActualizados) {
+      guardarNinos();
     }
 
     if (filasMaestros.length) {
@@ -1877,7 +2371,7 @@ async function cargarDatosDesdeAPI() {
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
                     </button>
                   ` : ""}
-                  ${usuarioActual.rol === "Administrador" ? `
+                  ${usuarioActual ? `
                     <button class="accion-lider boton-editar" title="Modificar niño" aria-label="Modificar niño"
                       onclick="editarNino('${salon}', ${indice})">
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-4-4L4 16v4Z" /><path d="m13.5 6.5 4 4" /></svg>
@@ -2001,7 +2495,14 @@ async function cargarDatosDesdeAPI() {
       ninos[salonNuevo].push(nombre);
       datosNinos[claveNino(salonNuevo, nombre)] = {
         cumpleanos,
-        estado: "Activo"
+        estado: "Activo",
+        representante: "",
+        telefonoRepresentante: "",
+        alergico: false,
+        alergias: "",
+        fotoData: "",
+        fotoTipo: "",
+        fechaAlta: obtenerDomingoAnterior()
       };
       guardarDatosNinos();
       ordenarNinos(salonNuevo);
@@ -2018,6 +2519,7 @@ async function cargarDatosDesdeAPI() {
     }
 
     function eliminarNino(salon, indice) {
+      if (!usuarioActual || usuarioActual.rol !== "Administrador") return;
       const nombre = ninos[salon][indice];
 
       ninoEliminacionPendiente = { salon, indice };
@@ -2028,7 +2530,8 @@ async function cargarDatosDesdeAPI() {
     }
 
     function eliminarNinoConfirmado() {
-      if (!ninoEliminacionPendiente) {
+      if (!usuarioActual || usuarioActual.rol !== "Administrador" ||
+          !ninoEliminacionPendiente) {
         return;
       }
 
@@ -2050,26 +2553,30 @@ async function cargarDatosDesdeAPI() {
       const archivo = document.getElementById("multimediaClase")?.files[0];
       const datosClase = obtenerDatosClase(salon, fecha);
 
-      if (archivo) {
-        const limite = archivo.type.startsWith("video/") ? 5 * 1024 * 1024 : 2 * 1024 * 1024;
-        if (archivo.size > limite) {
-          alert(`El archivo supera el límite permitido de ${archivo.type.startsWith("video/") ? "5 MB" : "2 MB"}.`);
-          return;
-        }
-      }
-
-      const multimedia = archivo
-        ? await new Promise((resolver, rechazar) => {
-            const lector = new FileReader();
-            lector.onload = () => resolver({ tipo: archivo.type, datos: lector.result });
-            lector.onerror = rechazar;
-            lector.readAsDataURL(archivo);
-          })
-        : { tipo: datosClase?.MediaTipo || "", datos: datosClase?.MediaData || "" };
-
       if (!esDomingo(fecha)) {
         alert("No se puede guardar la asistencia: seleccione un domingo.");
         return;
+      }
+
+      let multimedia;
+      if (archivo) {
+        const esImagen = archivo.type.startsWith("image/");
+        const limite = archivo.type.startsWith("video/") ? 5 * 1024 * 1024 : 2 * 1024 * 1024;
+        if (!esImagen && archivo.size > limite) {
+          alert(`El archivo supera el límite permitido de ${archivo.type.startsWith("video/") ? "5 MB" : "2 MB"}.`);
+          return;
+        }
+        try {
+          multimedia = esImagen
+            ? await prepararImagen(archivo, limite)
+            : { tipo: archivo.type, datos: await leerArchivoComoDataURL(archivo) };
+        } catch (error) {
+          console.error("No se pudo preparar el archivo multimedia de la asistencia.", error);
+          alert("No se pudo preparar el archivo multimedia. Intente con otra imagen.");
+          return;
+        }
+      } else {
+        multimedia = { tipo: datosClase?.MediaTipo || "", datos: datosClase?.MediaData || "" };
       }
 
       const filasAsistencia = ninos[salon].map((nombre, indice) => {
@@ -2177,11 +2684,8 @@ function nombreMesCumpleanos(fechaTexto) {
 }
 
 function obtenerNinosConCumpleanos() {
-  const salones = usuarioActual?.rol === "Administrador" || usuarioActual?.rol === "Supervisor"
-    ? Object.entries(ninos)
-    : Object.entries(ninos).filter(([salon]) => salon === usuarioActual?.salon);
-  return salones.flatMap(([salon, nombres]) => nombres.map(nombre => ({
-    salon, nombre, cumpleanos: obtenerDatosNino(salon, nombre).cumpleanos
+  return Object.entries(ninos).flatMap(([salon, nombres]) => nombres.map(nombre => ({
+    salon, nombre, ...obtenerDatosNino(salon, nombre)
   })).filter(nino => nino.cumpleanos));
 }
 
@@ -2257,6 +2761,8 @@ function mostrarAnunciosLogin() {
   if (!lista) return;
 
   const vigentes = ordenarAnuncios(anuncios.filter(anuncioVigente));
+  const seccion = lista.closest(".anuncios-inicio");
+  seccion?.classList.toggle("oculto", vigentes.length === 0);
 
   lista.classList.toggle("una-columna", vigentes.length === 1);
 
@@ -2280,7 +2786,7 @@ function mostrarAnunciosLogin() {
         ${multimedia}
       </article>
     `;
-  }).join("") || "<p>No hay anuncios publicados.</p>";
+  }).join("");
 }
 
 function anuncioVigente(anuncio) {
@@ -2382,6 +2888,8 @@ function cancelarEdicionAnuncio() {
   document.getElementById("multimediaAnuncio").value = "";
   document.getElementById("botonGuardarAnuncio").textContent = "Publicar anuncio";
   document.getElementById("botonCancelarEdicionAnuncio").classList.add("oculto");
+  mostrarListaAnuncios();
+  mostrarAnunciosLogin();
 }
 
 function confirmarEliminarAnuncio(indice) {
@@ -2393,7 +2901,7 @@ function confirmarEliminarAnuncio(indice) {
 }
 
 async function eliminarAnuncioConfirmado() {
-  if (anuncioPendiente === null) return;
+  if (usuarioActual?.rol !== "Administrador" || anuncioPendiente === null) return;
   anuncios.splice(anuncioPendiente, 1);
   anuncioPendiente = null;
   localStorage.setItem("anunciosInfantilRedencion", JSON.stringify(anuncios));
@@ -2426,15 +2934,9 @@ async function eliminarAnuncioConfirmado() {
     ? document.getElementById("salon").value
     : usuarioActual.salon;
   const domingoActual = obtenerDomingoAnterior();
-  const fechaInicio = new Date(`${domingoActual}T00:00:00`);
-  fechaInicio.setDate(fechaInicio.getDate() - 12 * 7);
 
   document.getElementById("resumenSalon").value = salon;
-  document.getElementById("resumenDesde").value = [
-    fechaInicio.getFullYear(),
-    String(fechaInicio.getMonth() + 1).padStart(2, "0"),
-    String(fechaInicio.getDate()).padStart(2, "0")
-  ].join("-");
+  document.getElementById("resumenDesde").value = "2026-09-20";
   document.getElementById("resumenHasta").value = domingoActual;
   cargarNinosResumen();
   document.getElementById("contenidoResumenNino").innerHTML = "";
@@ -2454,50 +2956,95 @@ function abrirResumenClase() {
 
 function mostrarResumenClase() {
   if (!usuarioActual || (usuarioActual.rol !== "Supervisor" && usuarioActual.rol !== "Administrador")) return;
-  const salon = document.getElementById("resumenClaseSalon").value;
+  const salonSeleccionado = document.getElementById("resumenClaseSalon").value;
   const fecha = document.getElementById("resumenClaseFecha").value;
   if (!fecha || !esDomingo(fecha)) return alert("Seleccione una fecha que sea domingo.");
-  const lideres = ninos[salon] || [];
-  const registros = asistencias.filter(fila => String(fila.Salon) === salon && String(fila.Fecha) === fecha);
-  const registrosPorNombre = Object.fromEntries(registros.map(fila => [String(fila.Nombre), fila]));
-  const asistentes = lideres.filter(nombre => registrosPorNombre[nombre]?.Asistencia === "Sí").length;
-  const filas = lideres.map(nombre => {
-    const registro = registrosPorNombre[nombre];
-    const asistio = registro?.Asistencia === "Sí";
-    return `<tr class="${registro && !asistio ? "fila-falta" : ""}">
-        <td>${escaparTexto(nombre)}</td>
-        <td>${escaparTexto(obtenerDatosNino(salon, nombre).estado || "Activo")}</td>
-        <td>${asistio ? "Asistió" : "Faltó"}</td>
-        <td>${asistio ? escaparTexto(registro?.Comportamiento || "-") : "-"}</td>
-        <td>${asistio ? escaparTexto(registro?.Participacion || "-") : "-"}</td>
-        <td>${asistio ? escaparTexto(registro?.Desarrollo || "-") : "-"}</td>
-        <td>${asistio ? escaparTexto(registro?.Observaciones || "-") : "-"}</td>
-      </tr>`;
-  }).join("");
-  const datosClase = obtenerDatosClase(salon, fecha);
+  const salones = salonSeleccionado === "todos"
+    ? Object.keys(ninos)
+    : [salonSeleccionado];
+  const lideresPorSalon = salones.map(salon => ({
+    salon,
+    nombres: ninos[salon] || [],
+    registros: asistencias.filter(fila =>
+      String(fila.Salon) === salon && String(fila.Fecha) === fecha
+    )
+  }));
+  const totalNinos = lideresPorSalon.reduce((total, grupo) => total + grupo.nombres.length, 0);
+  const totalAsistentes = lideresPorSalon.reduce(
+    (total, grupo) => total + grupo.nombres.filter(nombre =>
+      grupo.registros.some(registro =>
+        String(registro.Nombre) === nombre && registro.Asistencia === "Sí"
+      )
+    ).length,
+    0
+  );
+  const totalRegistros = lideresPorSalon.reduce((total, grupo) => total + grupo.registros.length, 0);
+  const desgloseAsistencia = salonSeleccionado === "todos"
+    ? `<div class="asistencia-por-salon">
+        ${lideresPorSalon.map(grupo => {
+          const asistentesSalon = grupo.nombres.filter(nombre =>
+            grupo.registros.some(registro =>
+              String(registro.Nombre) === nombre && registro.Asistencia === "Sí"
+            )
+          ).length;
+          const claseCero = asistentesSalon === 0 || grupo.registros.length === 0
+            ? "asistencia-cero"
+            : "";
+          return `<span><span>${escaparTexto(grupo.salon)}</span><span class="conteo-asistencia ${claseCero}">${asistentesSalon}</span></span>`;
+        }).join("")}
+        <span class="asistencia-total"><span>Total</span><span class="conteo-asistencia">${totalAsistentes}</span></span>
+      </div>`
+    : `<strong>${totalAsistentes}</strong>`;
+  const filas = lideresPorSalon.flatMap(({ salon, nombres, registros }) =>
+    nombres.map(nombre => {
+      const registro = registros.find(fila => String(fila.Nombre) === nombre);
+      const asistio = registro?.Asistencia === "Sí";
+      return `<tr class="${!asistio ? "fila-falta" : ""}">
+          ${salonSeleccionado === "todos" ? `<td class="col-salon">${escaparTexto(salon)}</td>` : ""}
+          <td class="col-nino">${escaparTexto(nombre)}</td>
+          <td>${escaparTexto(obtenerDatosNino(salon, nombre).estado || "Activo")}</td>
+          <td>${asistio ? "Asistió" : "Faltó"}</td>
+          <td>${asistio ? escaparTexto(registro?.Comportamiento || "-") : "-"}</td>
+          <td>${asistio ? escaparTexto(registro?.Participacion || "-") : "-"}</td>
+          <td>${asistio ? escaparTexto(registro?.Desarrollo || "-") : "-"}</td>
+          <td class="col-observaciones">${asistio ? escaparTexto(registro?.Observaciones || "-") : "-"}</td>
+        </tr>`;
+    })
+  ).join("");
+  const datosClases = lideresPorSalon.map(({ salon }) => ({
+    salon,
+    datos: obtenerDatosClase(salon, fecha)
+  })).filter(({ datos }) => datos?.Comentario || datos?.MediaData);
+  const detalleClase = datosClases.map(({ salon, datos }) => `
+    <section class="detalle-resumen-clase">
+      ${salonSeleccionado === "todos" ? `<h3>${escaparTexto(salon)}</h3>` : ""}
+      ${datos.Comentario ? `<div class="resumen-dato">Comentario de la clase<strong>${escaparTexto(datos.Comentario)}</strong></div>` : ""}
+      ${mostrarMultimediaClase(datos)}
+    </section>
+  `).join("");
   document.getElementById("contenidoResumenClase").innerHTML = `
     <div class="resumen-datos">
-      <div class="resumen-dato">Niños<strong>${lideres.length}</strong></div>
-      <div class="resumen-dato">Asistieron<strong>${asistentes}</strong></div>
-      <div class="resumen-dato">Faltaron<strong>${lideres.length - asistentes}</strong></div>
-      <div class="resumen-dato">Registros guardados<strong>${registros.length}</strong></div>
+      <div class="resumen-dato">Niños<strong>${totalNinos}</strong></div>
+    <div class="resumen-dato">Asistieron${desgloseAsistencia}</div>
+      <div class="resumen-dato">Faltaron<strong>${totalNinos - totalAsistentes}</strong></div>
+      <div class="resumen-dato">Registros guardados<strong>${totalRegistros}</strong></div>
     </div>
     <div class="tabla-scroll">
       <table class="tabla-resumen">
         <tr>
-          <th>Niño</th>
+          ${salonSeleccionado === "todos" ? `<th class="col-salon">Salón</th>` : ""}
+          <th class="col-nino">Niño</th>
           <th>Estado</th>
           <th>Asistencia</th>
           <th>Comportamiento</th>
           <th>Participación</th>
           <th>Desarrollo</th>
-          <th>Observaciones</th>
+          <th class="col-observaciones">Observaciones</th>
         </tr>
-        ${filas || "<tr><td colspan=\"7\">No hay niños registrados en este salón.</td></tr>"}
+        ${filas || `<tr><td colspan="${salonSeleccionado === "todos" ? 8 : 7}">No hay niños registrados en ${salonSeleccionado === "todos" ? "los salones" : "este salón"}.</td></tr>`}
       </table>
     </div>
-    <div class="resumen-dato">Comentario de la clase<strong>${escaparTexto(datosClase?.Comentario || "Sin comentario")}</strong></div>
-    ${mostrarMultimediaClase(datosClase)}
+    ${detalleClase || (!ninos[salonSeleccionado] && salonSeleccionado !== "todos" ? "" : "<p>No hay comentarios ni archivos multimedia de clase para esta fecha.</p>")}
   `;
 }
 
@@ -2505,21 +3052,59 @@ function mostrarCalendarioCumpleanos() {
   const mesTexto = document.getElementById("mesCumpleanos").value;
   const mes = Number(mesTexto);
   const anioActual = new Date().getFullYear();
-  const primerDia = new Date(anioActual, mes - 1, 1).getDay();
-  const diasDelMes = new Date(anioActual, mes, 0).getDate();
   const porDia = {};
-  obtenerNinosConCumpleanos().filter(nino => Number(nino.cumpleanos.split("-")[0]) === mes)
-    .forEach(nino => {
-      const dia = Number(nino.cumpleanos.split("-")[1]);
-      (porDia[dia] ||= []).push(nino);
-    });
-  const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  obtenerNinosConCumpleanos().forEach(nino => {
+    (porDia[nino.cumpleanos] ||= []).push(nino);
+  });
+  const dias = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   let html = `<div class="calendario-cumpleanos">${dias.map(dia => `<div class="dia-semana">${dia}</div>`).join("")}`;
-  for (let indice = 0; indice < primerDia; indice++) html += '<div class="dia-cumpleanos vacio"></div>';
-  for (let dia = 1; dia <= diasDelMes; dia++) {
-    html += `<div class="dia-cumpleanos"><span class="numero-dia">${dia}</span>${(porDia[dia] || []).map(nino => `<span class="cumpleanero"><strong>${escaparTexto(nino.nombre)}</strong><br>${escaparTexto(nino.salon)}</span>`).join("")}</div>`;
+  const primerDiaMes = new Date(anioActual, mes - 1, 1);
+  const diaInicio = new Date(primerDiaMes);
+  diaInicio.setDate(diaInicio.getDate() - ((diaInicio.getDay() + 6) % 7));
+  const diasEnMes = new Date(anioActual, mes, 0).getDate();
+  const numeroCeldas = Math.ceil((((primerDiaMes.getDay() + 6) % 7) + diasEnMes) / 7) * 7;
+
+  for (let indice = 0; indice < numeroCeldas; indice++) {
+    const fecha = new Date(diaInicio);
+    fecha.setDate(diaInicio.getDate() + indice);
+    const mesCelda = fecha.getMonth() + 1;
+    const claveCumpleanos = `${String(mesCelda).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+    const cumpleaneros = porDia[claveCumpleanos] || [];
+    const clasesMes = mesCelda === mes ? "" : " otro-mes";
+    html += `<button type="button" class="dia-cumpleanos${clasesMes}" aria-label="${fecha.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })}" onclick="abrirCumpleanosDia(${mesCelda}, ${fecha.getDate()}, ${fecha.getFullYear()})"><span class="numero-dia">${fecha.getDate()}</span>${cumpleaneros.map(nino => `<span class="cumpleanero"><strong>${escaparTexto(nino.nombre)}</strong><br>${escaparTexto(nino.salon)}<img class="foto-cumpleanero" src="${escaparTexto(fuenteFotoNino(nino))}" alt="Foto de ${escaparTexto(nino.nombre)}"></span>`).join("")}</button>`;
   }
   document.getElementById("calendarioCumpleanos").innerHTML = `${html}</div>`;
+}
+
+const ICONO_USUARIO_NINO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23174ea6'%3E%3Cpath d='M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5.2 0-9 2.7-9 6v2h18v-2c0-3.3-3.8-6-9-6Z'/%3E%3C/svg%3E";
+
+function fuenteFotoNino(nino) {
+  return nino?.fotoData || ICONO_USUARIO_NINO;
+}
+
+function abrirCumpleanosDia(mes, dia, anio = new Date().getFullYear()) {
+  const cumpleanos = obtenerNinosConCumpleanos().filter(nino => {
+    const [mesNino, diaNino] = nino.cumpleanos.split("-").map(Number);
+    return mesNino === mes && diaNino === dia;
+  });
+  const fecha = new Date(anio, mes - 1, dia);
+  document.getElementById("tituloCumpleanosDia").textContent =
+    `Cumpleaños del ${fecha.toLocaleDateString("es-MX", { day: "numeric", month: "long" })}`;
+  document.getElementById("listaCumpleanosDia").innerHTML = cumpleanos.length
+    ? cumpleanos.map(nino => `
+      <article class="cumpleanero-dia">
+        <img class="foto-cumpleanero multimedia-ampliable"
+          src="${escaparTexto(fuenteFotoNino(nino))}"
+          alt="Foto de ${escaparTexto(nino.nombre)}"
+          title="Abrir foto"
+          onclick="abrirMultimediaDesdeElemento(event, this)">
+        <div><strong>${escaparTexto(nino.nombre)}</strong><br>
+          <span>Salón: ${escaparTexto(nino.salon)}</span>
+        </div>
+      </article>
+    `).join("")
+    : "<p>No hay cumpleaños registrados para este día.</p>";
+  document.getElementById("modalCumpleanosDia").classList.remove("oculto");
 }
 
 function abrirCalendarioCumpleanos() {
@@ -2628,14 +3213,29 @@ function abrirCalendarioCumpleanos() {
       </tr>
     `;
   }).join("");
+  const datosNino = obtenerDatosNino(salon, nino);
 
   document.getElementById("contenidoResumenNino").innerHTML = `
-    <h3>${escaparTexto(nino)} | ${salon}</h3>
-    <p>Periodo: ${formatearFechaResumen(desde)} al ${formatearFechaResumen(hasta)}</p>
+    <div class="encabezado-resumen-nino">
+      <div class="foto-resumen-contenedor">
+        <img class="foto-nino-resumen multimedia-ampliable"
+          src="${escaparTexto(fuenteFotoNino(datosNino))}"
+          alt="Foto de ${escaparTexto(nino)}"
+          title="Abrir foto"
+          onclick="abrirMultimediaDesdeElemento(event, this)">
+      </div>
+      <div class="datos-encabezado-resumen">
+        <h3>${escaparTexto(nino)} | ${escaparTexto(salon)}</h3>
+        <p class="fecha-cumpleanos-resumen"><strong>Cumpleaños:</strong> ${datosNino.cumpleanos ? nombreMesCumpleanos(datosNino.cumpleanos) : "Sin registrar"}</p>
+        <p>Periodo: ${formatearFechaResumen(desde)} al ${formatearFechaResumen(hasta)}</p>
+      </div>
+    </div>
 
     <div class="resumen-datos">
-      <div class="resumen-dato">Cumpleaños<strong>${obtenerDatosNino(salon, nino).cumpleanos ? nombreMesCumpleanos(obtenerDatosNino(salon, nino).cumpleanos) : "Sin registrar"}</strong></div>
-      <div class="resumen-dato">Estado<strong>${escaparTexto(obtenerDatosNino(salon, nino).estado || "Activo")}</strong></div>
+      <div class="resumen-dato">Estado<strong>${escaparTexto(datosNino.estado || "Activo")}</strong></div>
+      <div class="resumen-dato">Representante<strong>${escaparTexto(datosNino.representante || "Sin registrar")}</strong></div>
+      <div class="resumen-dato">Teléfono del representante<strong>${escaparTexto(datosNino.telefonoRepresentante || "Sin registrar")}</strong></div>
+      <div class="resumen-dato">Alergias<strong>${datosNino.alergico ? escaparTexto(datosNino.alergias || "Sí, no especificadas") : "No"}</strong></div>
       <div class="resumen-dato">Domingos del periodo<strong>${domingos.length}</strong></div>
       <div class="resumen-dato">Asistencias<strong>${asistenciasContadas}</strong></div>
       <div class="resumen-dato">Faltas<strong>${faltasContadas}</strong></div>
@@ -2750,30 +3350,76 @@ function crearUsuario() {
 }
 
 let ninoPendiente = null;
+let fotoNinoSeleccionada = "";
+let fotoNinoTipoSeleccionada = "";
 
     function editarNino(salon, indice) {
-      if (usuarioActual.rol !== "Administrador") {
-        return;
-      }
+      if (!usuarioActual || !ninos[salon]?.[indice]) return;
 
       const nombreAnterior = ninos[salon][indice];
+      const datos = obtenerDatosNino(salon, nombreAnterior);
 
       ninoPendiente = { salon, indice };
+      fotoNinoSeleccionada = datos.fotoData || "";
+      fotoNinoTipoSeleccionada = datos.fotoTipo || "";
 
       document.getElementById("nombreNinoCambioTexto").textContent =
         `Nombre actual: ${nombreAnterior}`;
       document.getElementById("nombreNinoModal").value = nombreAnterior;
       document.getElementById("cumpleanosNinoModal").value =
-        formatearCumpleanosEntrada(obtenerDatosNino(salon, nombreAnterior).cumpleanos);
+        formatearCumpleanosEntrada(datos.cumpleanos);
       document.getElementById("estadoNinoModal").value =
-        obtenerDatosNino(salon, nombreAnterior).estado || "Activo";
+        datos.estado || "Activo";
+      document.getElementById("representanteNinoModal").value =
+        datos.representante || "";
+      document.getElementById("telefonoRepresentanteModal").value =
+        datos.telefonoRepresentante || "";
+      document.getElementById("alergicoNinoModal").checked = Boolean(datos.alergico);
+      document.getElementById("alergiasNinoModal").value = datos.alergias || "";
+      document.getElementById("alergiasNinoModal").disabled = !datos.alergico;
+      document.getElementById("fotoNinoArchivo").value = "";
+      actualizarVistaFotoNino();
       document.getElementById("modalNombreNino").classList.remove("oculto");
     }
 
-    function guardarNombreNino() {
-      if (!ninoPendiente) {
+    function actualizarVistaFotoNino() {
+      const boton = document.getElementById("fotoNinoPerfil");
+      const imagen = document.getElementById("fotoNinoPrevia");
+      const tieneFoto = Boolean(fotoNinoSeleccionada);
+      boton.classList.toggle("tiene-foto", tieneFoto);
+      imagen.src = fotoNinoSeleccionada || "";
+    }
+
+    function abrirFotoNino() {
+      if (!fotoNinoSeleccionada) {
+        document.getElementById("fotoNinoArchivo").click();
         return;
       }
+      document.getElementById("contenidoMultimedia").innerHTML =
+        `<img src="${escaparTexto(fotoNinoSeleccionada)}" alt="Foto ampliada del niño">`;
+      document.getElementById("modalMultimedia").classList.remove("oculto");
+    }
+
+    async function cargarFotoNino(archivo) {
+      if (!archivo) return;
+      if (!archivo.type.startsWith("image/")) {
+        alert("Seleccione un archivo de imagen.");
+        return;
+      }
+      try {
+        const foto = await prepararImagen(archivo, 2 * 1024 * 1024);
+        fotoNinoSeleccionada = String(foto.datos || "");
+        fotoNinoTipoSeleccionada = foto.tipo;
+        actualizarVistaFotoNino();
+      } catch (error) {
+        console.error("No se pudo preparar la foto del niño.", error);
+        document.getElementById("fotoNinoArchivo").value = "";
+        alert("No se pudo preparar la foto seleccionada. Intente con otra imagen.");
+      }
+    }
+
+    function guardarNombreNino() {
+      if (!usuarioActual || !ninoPendiente) return;
 
       const nuevoNombre = document.getElementById("nombreNinoModal")
         .value.trim();
@@ -2788,11 +3434,30 @@ let ninoPendiente = null;
       }
 
       const nombreAnterior = ninos[ninoPendiente.salon][ninoPendiente.indice];
+      if (nuevoNombre !== nombreAnterior &&
+          ninos[ninoPendiente.salon].includes(nuevoNombre)) {
+        alert("Ya existe un niño con ese nombre en este salón.");
+        return;
+      }
+      const datosAnteriores = obtenerDatosNino(ninoPendiente.salon, nombreAnterior);
       delete datosNinos[claveNino(ninoPendiente.salon, nombreAnterior)];
       ninos[ninoPendiente.salon][ninoPendiente.indice] = nuevoNombre;
       datosNinos[claveNino(ninoPendiente.salon, nuevoNombre)] = {
+        ...datosAnteriores,
         cumpleanos: nuevoCumpleanos,
-        estado: nuevoEstado
+        estado: nuevoEstado,
+        semanasSinAsistencia: 0,
+        ultimoDomingoEstado: obtenerDomingoAnterior(),
+        estadoManual: nuevoEstado,
+        estadoManualFecha: obtenerDomingoAnterior(),
+        representante: document.getElementById("representanteNinoModal").value.trim(),
+        telefonoRepresentante: document.getElementById("telefonoRepresentanteModal").value.trim(),
+        alergico: document.getElementById("alergicoNinoModal").checked,
+        alergias: document.getElementById("alergicoNinoModal").checked
+          ? document.getElementById("alergiasNinoModal").value.trim()
+          : "",
+        fotoData: fotoNinoSeleccionada,
+        fotoTipo: fotoNinoTipoSeleccionada
       };
       guardarDatosNinos();
       ordenarNinos(ninoPendiente.salon);
@@ -2885,7 +3550,7 @@ function cerrarModal(id) {
 
   document.getElementById("pantallaSistema").classList.add("oculto");
   document.getElementById("pantallaLogin").classList.remove("oculto");
-  document.querySelector(".anuncios-inicio").classList.remove("oculto");
+  mostrarAnunciosLogin();
 
   document.getElementById("usuario").value = "";
   document.getElementById("contrasena").value = "";
@@ -2895,6 +3560,7 @@ function cerrarModal(id) {
   document.getElementById("modalResumenNino").classList.add("oculto");
   document.getElementById("modalResumenClase").classList.add("oculto");
   document.getElementById("modalCumpleanos").classList.add("oculto");
+  document.getElementById("modalCumpleanosDia").classList.add("oculto");
   document.getElementById("modalAnuncios").classList.add("oculto");
   document.getElementById("modalConfirmacionAnuncio").classList.add("oculto");
   document.getElementById("cintaCumpleanosSistema").classList.remove("visible");
