@@ -2147,6 +2147,19 @@ async function cargarDatosDesdeAPI() {
       return `u${identificador}@asistencia-infantil-redencion.firebaseapp.com`;
     }
 
+    function esperarConLimite(operacion, etapa, limiteMs = 30000) {
+      let temporizador;
+      return Promise.race([
+        operacion,
+        new Promise((_, rechazar) => {
+          temporizador = setTimeout(
+            () => rechazar(new Error(`LOGIN_TIMEOUT:${etapa}`)),
+            limiteMs
+          );
+        })
+      ]).finally(() => clearTimeout(temporizador));
+    }
+
     async function iniciarSesion() {
       const usuario = document.getElementById("usuario").value.trim();
       const contrasena = document.getElementById("contrasena").value;
@@ -2163,13 +2176,20 @@ async function cargarDatosDesdeAPI() {
 
       try {
         const firebase = await window.firebaseReady;
-        const credencial = await firebase.signInWithEmailAndPassword(
-          firebase.auth,
-          correoInternoDeUsuario(usuario),
-          contrasena
+        const credencial = await esperarConLimite(
+          firebase.signInWithEmailAndPassword(
+            firebase.auth,
+            correoInternoDeUsuario(usuario),
+            contrasena
+          ),
+          "autenticación"
         );
-        const resultadoPerfil = await firebase.get(
-          firebase.ref(firebase.database, `Perfiles/${credencial.user.uid}`)
+        mensaje.textContent = "Acceso validado; verificando perfil...";
+        const resultadoPerfil = await esperarConLimite(
+          firebase.get(
+            firebase.ref(firebase.database, `Perfiles/${credencial.user.uid}`)
+          ),
+          "perfil"
         );
 
         if (!resultadoPerfil.exists()) {
@@ -2197,7 +2217,8 @@ async function cargarDatosDesdeAPI() {
           rol: perfil.rol,
           salon: perfil.salon
         };
-        await cargarDatosDesdeAPI();
+        mensaje.textContent = "Perfil validado; cargando asistencias...";
+        await esperarConLimite(cargarDatosDesdeAPI(), "datos");
 
         mensaje.textContent = "";
         document.getElementById("pantallaLogin").classList.add("oculto");
@@ -2230,7 +2251,7 @@ async function cargarDatosDesdeAPI() {
         console.error("No se pudo iniciar sesión en la aplicación.", error);
         try {
           const firebase = await window.firebaseReady;
-          await firebase.signOut(firebase.auth);
+          await esperarConLimite(firebase.signOut(firebase.auth), "cierre de sesión", 5000);
         } catch (errorCerrarSesion) {
           console.error("No se pudo cerrar la sesión de Firebase.", errorCerrarSesion);
         }
@@ -2244,6 +2265,14 @@ async function cargarDatosDesdeAPI() {
         } else if (error?.code === "auth/too-many-requests") {
           mensaje.textContent =
             "Se realizaron demasiados intentos. Espere un momento y vuelva a intentarlo.";
+        } else if (error?.message?.startsWith("LOGIN_TIMEOUT:")) {
+          mensaje.textContent = error.message.endsWith(":autenticación")
+            ? "Firebase tardó demasiado en verificar el acceso. Revise la conexión e intente de nuevo."
+            : error.message.endsWith(":perfil")
+              ? "El acceso se validó, pero no se pudo verificar el perfil. Contacte al administrador."
+              : error.message.endsWith(":datos")
+                ? "El perfil se validó, pero la carga de asistencias tardó demasiado. Revise la conexión e intente de nuevo."
+                : "La conexión tardó demasiado. Intente de nuevo.";
         } else if (error?.code?.startsWith("auth/")) {
           mensaje.textContent = "Usuario o contraseña incorrectos.";
         } else {
