@@ -1,0 +1,34 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "Perfiles": {
+      ".read": false,
+      ".write": false,
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": false
+      }
+    },
+    "Niños": {
+      ".read": "auth != null && root.child('Perfiles').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('Perfiles').child(auth.uid).exists() && (root.child('Perfiles').child(auth.uid).child('rol').val() == 'Maestro' || root.child('Perfiles').child(auth.uid).child('rol').val() == 'Administrador')"
+    },
+    "Asistencias": {
+      ".read": "auth != null && root.child('Perfiles').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('Perfiles').child(auth.uid).exists() && (root.child('Perfiles').child(auth.uid).child('rol').val() == 'Maestro' || root.child('Perfiles').child(auth.uid).child('rol').val() == 'Administrador')"
+    },
+    "Maestros": {
+      ".read": "auth != null && root.child('Perfiles').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('Perfiles').child(auth.uid).child('rol').val() == 'Administrador'"
+    },
+    "Anuncios": {
+      ".read": "auth != null && root.child('Perfiles').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('Perfiles').child(auth.uid).child('rol').val() == 'Administrador'"
+    },
+    "Usuarios": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
