@@ -1155,18 +1155,6 @@
   background: #b91c1c;
 }
 
-#mensajeUsuarios {
-  font-weight: bold;
-}
-
-#accionesUsuario {
-  margin-top: 10px;
-}
-
-#accionesUsuario.oculto {
-  display: none;
-}
-
 .texto-exito {
   color: #16803c !important;
 }
@@ -1268,13 +1256,10 @@
           onclick="abrirAnuncios()">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14V9a2 2 0 0 1 2-2h3l9-4v17l-9-4H6a2 2 0 0 1-2-2ZM9 16l2 5h4l-3-6M18 9a4 4 0 0 1 0 5"></path></svg>
         </button>
-
-        <button id="botonAdministrarUsuarios"
-          class="boton-icono boton-editar oculto" type="button"
-          aria-label="Administrar usuarios" title="Administrar usuarios"
-          data-tooltip="Administrar usuarios"
-          onclick="abrirAdministrarUsuarios()">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 8a3 3 0 0 1 0 6M17 16a5 5 0 0 1 4 4"></path></svg>
+        <button class="boton-icono" type="button" aria-label="Cambiar contraseña"
+          title="Cambiar contraseña" data-tooltip="Cambiar contraseña"
+          onclick="abrirCambioContrasena()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14a5 5 0 1 1 3.9-1.9L21 12v4h-3v3h-4v-3.1l-3.1-.3A5 5 0 0 1 7 14Z"></path><circle cx="7" cy="9" r="1"></circle></svg>
         </button>
 
         <button class="boton-icono" type="button" aria-label="Cerrar sesión"
@@ -1421,59 +1406,6 @@
   </div>
 
 
-      <div id="modalUsuarios" class="modal oculto">
-    <div class="ventana-usuarios">
-      <button class="cerrar-modal" onclick="cerrarAdministrarUsuarios()">
-        ×
-      </button>
-
-      <h2>Administrar usuarios</h2>
-
-      <h3>Modificar contraseña</h3>
-
-      <select id="usuarioSeleccionado">
-        <option value="">Seleccione un usuario</option>
-      </select>
-
-    <div id="accionesUsuario" class="oculto">
-      <button onclick="abrirCambioContrasena()">
-    Modificar contraseña
-      </button>
-
-      <button class="boton-rojo" onclick="confirmarEliminarUsuario()">
-    Eliminar usuario
-      </button>
-    </div>
-
-      <hr>
-
-      <h3>Crear nuevo usuario</h3>
-
-      <input id="nuevoUsuario" type="text"
-        placeholder="Nombre de usuario">
-
-      <input id="nuevaContrasena" type="password"
-        placeholder="Contraseña">
-
-      <select id="nuevoRol">
-        <option value="Maestro">Maestro</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Administrador">Administrador</option>
-      </select>
-
-      <select id="nuevoSalon">
-        <option value="Semillas">Semillas</option>
-        <option value="Plantas">Plantas</option>
-        <option value="Arboles">Árboles</option>
-        <option value="todos">Todos los salones</option>
-      </select>
-
-      <button onclick="crearUsuario()">Crear usuario</button>
-
-      <p id="mensajeUsuarios"></p>
-    </div>
-  </div>
-
   <div id="modalResumenNino" class="modal oculto">
     <div class="ventana-usuarios ventana-resumen">
       <button class="cerrar-modal" onclick="cerrarResumenNino()">×</button>
@@ -1569,40 +1501,6 @@
   </div>
 </div>
 
-    <div id="modalContrasena" class="modal oculto">
-  <div class="ventana-usuarios">
-    <button class="cerrar-modal" onclick="cerrarModal('modalContrasena')">×</button>
-
-    <h2>Modificar contraseña</h2>
-    <p id="usuarioCambioTexto"></p>
-
-    <input id="nuevaContrasenaModal"
-      type="password"
-      placeholder="Nueva contraseña">
-
-    <button onclick="guardarNuevaContrasena()">
-      Guardar contraseña
-    </button>
-  </div>
-</div>
-
-<div id="modalConfirmacion" class="modal oculto">
-  <div class="ventana-usuarios">
-    <button class="cerrar-modal" onclick="cerrarModal('modalConfirmacion')">×</button>
-
-    <h2>Confirmar eliminación</h2>
-    <p id="textoConfirmacion"></p>
-
-    <button class="boton-rojo" onclick="eliminarUsuarioConfirmado()">
-      Sí, eliminar
-    </button>
-
-    <button onclick="cerrarModal('modalConfirmacion')">
-      Cancelar
-    </button>
-  </div>
-</div>
-
 <div id="modalConfirmacionNino" class="modal oculto">
   <div class="ventana-usuarios">
     <button class="cerrar-modal" onclick="cerrarModal('modalConfirmacionNino')">×</button>
@@ -1630,6 +1528,20 @@
     </button>
   </div>
 </div>
+
+<div id="modalCambioContrasena" class="modal oculto">
+  <div class="ventana-usuarios">
+    <button class="cerrar-modal" onclick="cerrarModal('modalCambioContrasena')">×</button>
+    <h2>Cambiar contraseña</h2>
+    <p>Elija una contraseña nueva de al menos 6 caracteres.</p>
+    <label for="nuevaContrasena">Nueva contraseña:</label>
+    <input id="nuevaContrasena" type="password" autocomplete="new-password">
+    <label for="confirmarNuevaContrasena">Confirmar contraseña:</label>
+    <input id="confirmarNuevaContrasena" type="password" autocomplete="new-password">
+    <p id="mensajeCambioContrasena" role="status"></p>
+    <button id="botonGuardarContrasena" onclick="guardarNuevaContrasena()">Guardar contraseña</button>
+  </div>
+</div>
   </section>
 
   <div id="modalMultimedia" class="modal oculto"
@@ -1648,9 +1560,15 @@
       get,
       set
     } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      updatePassword
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyClKWjDf8mRbVUeZZfyw3rCxm1DdMy6oKY",
+      apiKey: "AIzaSyClKWdJf8mRbVUeZZfyw3rCxm1DdMy6oKY",
       authDomain: "asistencia-infantil-redencion.firebaseapp.com",
       databaseURL: "https://asistencia-infantil-redencion-default-rtdb.firebaseio.com",
       projectId: "asistencia-infantil-redencion",
@@ -1662,19 +1580,23 @@
 
     const firebaseApp = initializeApp(firebaseConfig);
     const firebaseDatabase = getDatabase(firebaseApp);
+    const firebaseAuth = getAuth(firebaseApp);
 
     window.firebaseReady = Promise.resolve({
       database: firebaseDatabase,
+      auth: firebaseAuth,
       ref,
       get,
-      set
+      set,
+      signInWithEmailAndPassword,
+      signOut,
+      updatePassword
     });
   </script>
 
   <script>
 const HOJAS = {
   ninos: "Niños",
-  usuarios: "Usuarios",
   asistencias: "Asistencias",
   maestros: "Maestros",
   anuncios: "Anuncios"
@@ -1902,21 +1824,11 @@ function filasDeNinos() {
   );
 }
 
-function filasDeUsuarios() {
-  return Object.entries(usuarios).map(([usuario, datos]) => ({
-    Usuario: usuario,
-    Contrasena: datos.contrasena,
-    Rol: datos.rol,
-    Salon: datos.salon
-  }));
-}
-
 async function cargarDatosDesdeAPI() {
   try {
-    const [filasNinos, filasUsuarios, filasAsistencias, filasMaestros, filasAnuncios] =
+    const [filasNinos, filasAsistencias, filasMaestros, filasAnuncios] =
       await Promise.all([
         leerHoja(HOJAS.ninos),
-        leerHoja(HOJAS.usuarios),
         leerHoja(HOJAS.asistencias),
         leerHoja(HOJAS.maestros),
         leerHoja(HOJAS.anuncios)
@@ -1958,20 +1870,6 @@ async function cargarDatosDesdeAPI() {
       sincronizarHoja(HOJAS.ninos, filasDeNinos());
     }
 
-    if (filasUsuarios.length) {
-      usuarios = {};
-      filasUsuarios.forEach(fila => {
-        usuarios[fila.Usuario] = {
-          contrasena: fila.Contrasena,
-          rol: fila.Rol,
-          salon: fila.Salon
-        };
-      });
-      localStorage.setItem("usuariosRedencion", JSON.stringify(usuarios));
-    } else {
-      sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
-    }
-
     if (filasAsistencias.length) {
       asistencias = filasAsistencias;
       localStorage.setItem(
@@ -1984,7 +1882,10 @@ async function cargarDatosDesdeAPI() {
       false
     );
     if (estadosActualizados) {
-      guardarNinos();
+      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
+      if (usuarioActual.rol !== "Supervisor") {
+        sincronizarHoja(HOJAS.ninos, filasDeNinos());
+      }
     }
 
     if (filasMaestros.length) {
@@ -2007,47 +1908,14 @@ async function cargarDatosDesdeAPI() {
         }))
       );
     }
+
   } catch (error) {
-    console.error("Firebase no está disponible. Se usará la copia local.", error);
+    console.error("No se pudieron cargar los datos protegidos de Firebase.", error);
+    throw error;
   }
 }
 
-    const usuariosIniciales = {
-      Sembrador: {
-        contrasena: "1234",
-        rol: "Maestro",
-        salon: "Semillas"
-      },
-      Regador: {
-        contrasena: "1234",
-        rol: "Maestro",
-        salon: "Plantas"
-      },
-      Cosechador: {
-        contrasena: "1234",
-        rol: "Maestro",
-        salon: "Arboles"
-      },
-      Pastor: {
-        contrasena: "admin123",
-        rol: "Administrador",
-        salon: "todos"
-      },
-      Supervisor: {
-        contrasena: "super123",
-        rol: "Supervisor",
-        salon: "todos"
-      }
-    };
-
-    let usuarios = JSON.parse(
-      localStorage.getItem("usuariosRedencion")
-    );
-
-    if (!usuarios) {
-      usuarios = usuariosIniciales;
-      guardarUsuarios();
-    }
+    localStorage.removeItem("usuariosRedencion");
 
     let ninosIniciales = {
       Semillas: ["Ana López", "Carlos Pérez", "María Gómez"],
@@ -2059,7 +1927,7 @@ async function cargarDatosDesdeAPI() {
 
     if (!ninos) {
       ninos = ninosIniciales;
-      guardarNinos();
+      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
     }
 
     let asistencias = JSON.parse(
@@ -2088,7 +1956,6 @@ async function cargarDatosDesdeAPI() {
         }
       });
 
-      cargarDatosDesdeAPI();
       mostrarAnunciosLogin();
     });
 
@@ -2222,11 +2089,6 @@ async function cargarDatosDesdeAPI() {
       campo.readOnly = usuarioActual.rol !== "Administrador";
     }
 
-    function guardarUsuarios() {
-      localStorage.setItem("usuariosRedencion", JSON.stringify(usuarios));
-      sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
-    }
-
     function escaparTexto(texto) {
       return texto
         .replaceAll("&", "&amp;")
@@ -2277,51 +2139,166 @@ async function cargarDatosDesdeAPI() {
           document.getElementById("modalMultimedia").classList.remove("oculto");
         }
 
-    function iniciarSesion() {
+    function correoInternoDeUsuario(usuario) {
+      const bytes = new TextEncoder().encode(usuario.trim().toLocaleLowerCase("es"));
+      const identificador = Array.from(bytes, byte =>
+        byte.toString(16).padStart(2, "0")
+      ).join("");
+      return `u${identificador}@asistencia-infantil-redencion.firebaseapp.com`;
+    }
+
+    async function iniciarSesion() {
       const usuario = document.getElementById("usuario").value.trim();
       const contrasena = document.getElementById("contrasena").value;
-      const datos = usuarios[usuario];
+      const boton = document.getElementById("botonIngresar");
+      const mensaje = document.getElementById("mensajeLogin");
 
-      if (!datos || datos.contrasena !== contrasena) {
-        document.getElementById("mensajeLogin").textContent =
-          "Usuario o contraseña incorrectos.";
+      if (!usuario || !contrasena) {
+        mensaje.textContent = "Escriba su usuario y contraseña.";
         return;
       }
 
-      usuarioActual = {
-        usuario,
-        ...datos
-      };
+      boton.disabled = true;
+      mensaje.textContent = "Verificando acceso seguro...";
 
-      document.getElementById("pantallaLogin").classList.add("oculto");
-      document.querySelector(".anuncios-inicio").classList.add("oculto");
-      document.getElementById("pantallaSistema").classList.remove("oculto");
+      try {
+        const firebase = await window.firebaseReady;
+        const credencial = await firebase.signInWithEmailAndPassword(
+          firebase.auth,
+          correoInternoDeUsuario(usuario),
+          contrasena
+        );
+        const resultadoPerfil = await firebase.get(
+          firebase.ref(firebase.database, `Perfiles/${credencial.user.uid}`)
+        );
 
-      document.getElementById("informacionUsuario").textContent =
-        `Usuario: ${usuarioActual.usuario} | Rol: ${usuarioActual.rol}`;
+        if (!resultadoPerfil.exists()) {
+          throw new Error("La cuenta no tiene un perfil autorizado.");
+        }
 
-      const selectorSalon = document.getElementById("salon");
-      const formulario = document.getElementById("formularioNino");
+        const perfil = resultadoPerfil.val();
+        const rolesPermitidos = ["Maestro", "Supervisor", "Administrador"];
+        const salonesPermitidos = ["Semillas", "Plantas", "Arboles"];
+        const perfilValido =
+          rolesPermitidos.includes(perfil.rol) &&
+          String(perfil.usuario || "").trim().toLocaleLowerCase("es") ===
+            usuario.toLocaleLowerCase("es") &&
+          (perfil.rol === "Maestro"
+            ? salonesPermitidos.includes(perfil.salon)
+            : perfil.salon === "todos");
 
-      if (usuarioActual.salon !== "todos") {
-        selectorSalon.value = usuarioActual.salon;
-        selectorSalon.disabled = true;
-        document.getElementById("salonNuevoNino").value = usuarioActual.salon;
-        document.getElementById("salonNuevoNino").disabled = true;
-      } else {
-        selectorSalon.disabled = false;
-        document.getElementById("salonNuevoNino").disabled = false;
+        if (!perfilValido) {
+          throw new Error("El perfil no coincide con el usuario o el rol.");
+        }
+
+        usuarioActual = {
+          uid: credencial.user.uid,
+          usuario: perfil.usuario,
+          rol: perfil.rol,
+          salon: perfil.salon
+        };
+        await cargarDatosDesdeAPI();
+
+        mensaje.textContent = "";
+        document.getElementById("pantallaLogin").classList.add("oculto");
+        document.querySelector(".anuncios-inicio").classList.add("oculto");
+        document.getElementById("pantallaSistema").classList.remove("oculto");
+        document.getElementById("informacionUsuario").textContent =
+          `Usuario: ${usuarioActual.usuario} | Rol: ${usuarioActual.rol}`;
+
+        const selectorSalon = document.getElementById("salon");
+        const formulario = document.getElementById("formularioNino");
+        if (usuarioActual.salon !== "todos") {
+          selectorSalon.value = usuarioActual.salon;
+          selectorSalon.disabled = true;
+          document.getElementById("salonNuevoNino").value = usuarioActual.salon;
+          document.getElementById("salonNuevoNino").disabled = true;
+        } else {
+          selectorSalon.disabled = false;
+          document.getElementById("salonNuevoNino").disabled = false;
+        }
+        formulario.classList.toggle(
+          "oculto",
+          usuarioActual.rol !== "Maestro" &&
+          usuarioActual.rol !== "Administrador"
+        );
+
+        mostrarAsistencia();
+        mostrarPanelUsuarios();
+        mostrarCintaCumpleanos();
+      } catch (error) {
+        console.error("No se pudo iniciar sesión en la aplicación.", error);
+        try {
+          const firebase = await window.firebaseReady;
+          await firebase.signOut(firebase.auth);
+        } catch (errorCerrarSesion) {
+          console.error("No se pudo cerrar la sesión de Firebase.", errorCerrarSesion);
+        }
+        usuarioActual = null;
+        if (error?.message === "La cuenta no tiene un perfil autorizado.") {
+          mensaje.textContent =
+            "La cuenta existe, pero falta asignarle un perfil en Firebase. Contacte al administrador.";
+        } else if (error?.message === "El perfil no coincide con el usuario o el rol.") {
+          mensaje.textContent =
+            "El perfil de esta cuenta no coincide con el usuario o el salón asignado.";
+        } else if (error?.code === "auth/too-many-requests") {
+          mensaje.textContent =
+            "Se realizaron demasiados intentos. Espere un momento y vuelva a intentarlo.";
+        } else if (error?.code?.startsWith("auth/")) {
+          mensaje.textContent = "Usuario o contraseña incorrectos.";
+        } else {
+          mensaje.textContent =
+            "No se pudo cargar la información protegida. Intente de nuevo o contacte al administrador.";
+        }
+      } finally {
+        boton.disabled = false;
+      }
+    }
+
+    function abrirCambioContrasena() {
+      if (!usuarioActual) return;
+      document.getElementById("nuevaContrasena").value = "";
+      document.getElementById("confirmarNuevaContrasena").value = "";
+      document.getElementById("mensajeCambioContrasena").textContent = "";
+      document.getElementById("modalCambioContrasena").classList.remove("oculto");
+    }
+
+    async function guardarNuevaContrasena() {
+      const nueva = document.getElementById("nuevaContrasena").value;
+      const confirmar = document.getElementById("confirmarNuevaContrasena").value;
+      const mensaje = document.getElementById("mensajeCambioContrasena");
+      const boton = document.getElementById("botonGuardarContrasena");
+
+      if (nueva.length < 6) {
+        mensaje.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        return;
+      }
+      if (nueva !== confirmar) {
+        mensaje.textContent = "Las contraseñas no coinciden.";
+        return;
       }
 
-      formulario.classList.toggle(
-        "oculto",
-        usuarioActual.rol !== "Maestro" &&
-        usuarioActual.rol !== "Administrador"
-      );
-
-      mostrarAsistencia();
-      mostrarPanelUsuarios();
-      mostrarCintaCumpleanos();
+      boton.disabled = true;
+      mensaje.textContent = "Guardando contraseña...";
+      try {
+        const firebase = await window.firebaseReady;
+        const usuarioAutenticado = firebase.auth.currentUser;
+        if (!usuarioAutenticado) {
+          throw new Error("No hay una sesión autenticada.");
+        }
+        await firebase.updatePassword(usuarioAutenticado, nueva);
+        document.getElementById("nuevaContrasena").value = "";
+        document.getElementById("confirmarNuevaContrasena").value = "";
+        document.getElementById("modalCambioContrasena").classList.add("oculto");
+        mostrarExito("La contraseña se cambió correctamente.");
+      } catch (error) {
+        console.error("No se pudo cambiar la contraseña.", error);
+        mensaje.textContent = error?.code === "auth/requires-recent-login"
+          ? "Vuelva a iniciar sesión y cambie su contraseña inmediatamente."
+          : "No se pudo cambiar la contraseña. Intente de nuevo.";
+      } finally {
+        boton.disabled = false;
+      }
     }
 
     function mostrarAsistencia() {
@@ -2333,7 +2310,10 @@ async function cargarDatosDesdeAPI() {
       if (!usuarioActual || !ninos[salon]) return;
 
       ordenarNinos(salon);
-      guardarNinos();
+      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
+      if (usuarioActual.rol !== "Supervisor") {
+        sincronizarHoja(HOJAS.ninos, filasDeNinos());
+      }
 
       const puedeModificar =
         usuarioActual.rol === "Maestro" ||
@@ -2642,24 +2622,9 @@ async function cargarDatosDesdeAPI() {
       }
     }
 
-    function guardarUsuarios() {
-  localStorage.setItem(
-    "usuariosRedencion",
-    JSON.stringify(usuarios)
-  );
-  sincronizarHoja(HOJAS.usuarios, filasDeUsuarios());
-}
-
     function mostrarPanelUsuarios() {
-  const boton = document.getElementById("botonAdministrarUsuarios");
   const botonResumen = document.getElementById("botonResumenNino");
   const botonResumenClase = document.getElementById("botonResumenClase");
-
-  if (usuarioActual && usuarioActual.rol === "Administrador") {
-    boton.classList.remove("oculto");
-  } else {
-    boton.classList.add("oculto");
-  }
 
   if (usuarioActual &&
       (usuarioActual.rol === "Supervisor" ||
@@ -3261,94 +3226,6 @@ function abrirCalendarioCumpleanos() {
   `;
 }
 
-    function abrirAdministrarUsuarios() {
-  if (!usuarioActual || usuarioActual.rol !== "Administrador") {
-    return;
-  }
-
-  const selector = document.getElementById("usuarioSeleccionado");
-
-  selector.innerHTML =
-    '<option value="">Seleccione un usuario</option>';
-
-  Object.keys(usuarios).forEach(usuario => {
-    selector.innerHTML += `
-      <option value="${escaparTexto(usuario)}">
-        ${escaparTexto(usuario)} -
-        ${escaparTexto(usuarios[usuario].rol)}
-      </option>
-    `;
-  });
-
-  document.getElementById("accionesUsuario").classList.add("oculto");
-  document.getElementById("mensajeUsuarios").textContent = "";
-  document.getElementById("modalUsuarios").classList.remove("oculto");
-}
-
-document.addEventListener("change", evento => {
-  if (evento.target.id !== "usuarioSeleccionado") {
-    return;
-  }
-
-  const acciones = document.getElementById("accionesUsuario");
-
-  acciones.classList.toggle(
-    "oculto",
-    !evento.target.value
-  );
-});
-
-    function cerrarAdministrarUsuarios() {
-  document.getElementById("modalUsuarios").classList.add("oculto");
-}
-
-function crearUsuario() {
-  if (!usuarioActual || usuarioActual.rol !== "Administrador") {
-    return;
-  }
-
-  const nombre = document.getElementById("nuevoUsuario").value.trim();
-  const contrasena = document.getElementById("nuevaContrasena").value.trim();
-  const rol = document.getElementById("nuevoRol").value;
-  const salon = document.getElementById("nuevoSalon").value;
-  const mensaje = document.getElementById("mensajeUsuarios");
-
-  if (!nombre || !contrasena) {
-    mensaje.textContent = "Complete el usuario y la contraseña.";
-    mensaje.style.color = "#dc2626";
-    return;
-  }
-
-  if (usuarios[nombre]) {
-    mensaje.textContent = "Ese usuario ya existe.";
-    mensaje.style.color = "#dc2626";
-    return;
-  }
-
-  if (rol === "Maestro" && salon === "todos") {
-    mensaje.textContent = "El maestro debe tener un salón asignado.";
-    mensaje.style.color = "#dc2626";
-    return;
-  }
-
-  usuarios[nombre] = {
-    contrasena,
-    rol,
-    salon: rol === "Maestro" ? salon : "todos"
-  };
-
-  guardarUsuarios();
-
-  document.getElementById("nuevoUsuario").value = "";
-  document.getElementById("nuevaContrasena").value = "";
-
-  mensaje.textContent = "Usuario creado correctamente.";
-  mensaje.style.color = "#16803c";
-
-  // Actualiza la lista desplegable de usuarios
-  abrirAdministrarUsuarios();
-}
-
 let ninoPendiente = null;
 let fotoNinoSeleccionada = "";
 let fotoNinoTipoSeleccionada = "";
@@ -3467,71 +3344,7 @@ let fotoNinoTipoSeleccionada = "";
       mostrarAsistencia();
     }
 
-let usuarioPendiente = null;
 let ninoEliminacionPendiente = null;
-
-function abrirCambioContrasena() {
-  const usuario = document.getElementById("usuarioSeleccionado").value;
-
-  if (!usuario) {
-    return;
-  }
-
-  usuarioPendiente = usuario;
-
-  document.getElementById("usuarioCambioTexto").textContent =
-    `Usuario: ${usuario}`;
-
-  document.getElementById("nuevaContrasenaModal").value = "";
-  document.getElementById("modalContrasena").classList.remove("oculto");
-}
-
-function guardarNuevaContrasena() {
-  const nuevaContrasena =
-    document.getElementById("nuevaContrasenaModal").value.trim();
-
-  if (!nuevaContrasena) {
-    alert("Escriba una contraseña.");
-    return;
-  }
-
-  usuarios[usuarioPendiente].contrasena = nuevaContrasena;
-  guardarUsuarios();
-
-  cerrarModal("modalContrasena");
-  mostrarExito("La contraseña fue modificada correctamente.");
-}
-
-function confirmarEliminarUsuario() {
-  const usuario = document.getElementById("usuarioSeleccionado").value;
-
-  if (!usuario) {
-    return;
-  }
-
-  if (usuario === usuarioActual.usuario) {
-    alert("No puede eliminar el usuario con el que inició sesión.");
-    return;
-  }
-
-  usuarioPendiente = usuario;
-
-  document.getElementById("textoConfirmacion").textContent =
-    `¿Está seguro de eliminar al usuario "${usuario}"?`;
-
-  document.getElementById("modalConfirmacion")
-    .classList.remove("oculto");
-}
-
-function eliminarUsuarioConfirmado() {
-  delete usuarios[usuarioPendiente];
-  guardarUsuarios();
-
-  cerrarModal("modalConfirmacion");
-  abrirAdministrarUsuarios();
-
-  mostrarExito("El usuario fue eliminado correctamente.");
-}
 
 function mostrarExito(mensaje) {
   document.getElementById("textoExito").textContent = mensaje;
@@ -3545,7 +3358,16 @@ function cerrarModal(id) {
   }
 }
 
-    function cerrarSesion() {
+    async function cerrarSesion() {
+  try {
+    const firebase = await window.firebaseReady;
+    await firebase.signOut(firebase.auth);
+  } catch (error) {
+    console.error("No se pudo cerrar la sesión de Firebase.", error);
+    alert("No se pudo cerrar la sesión. Intente de nuevo.");
+    return;
+  }
+
   usuarioActual = null;
 
   document.getElementById("pantallaSistema").classList.add("oculto");
@@ -3556,15 +3378,14 @@ function cerrarModal(id) {
   document.getElementById("contrasena").value = "";
   document.getElementById("mensajeLogin").textContent = "";
 
-  document.getElementById("modalUsuarios").classList.add("oculto");
   document.getElementById("modalResumenNino").classList.add("oculto");
   document.getElementById("modalResumenClase").classList.add("oculto");
   document.getElementById("modalCumpleanos").classList.add("oculto");
   document.getElementById("modalCumpleanosDia").classList.add("oculto");
   document.getElementById("modalAnuncios").classList.add("oculto");
   document.getElementById("modalConfirmacionAnuncio").classList.add("oculto");
+  document.getElementById("modalCambioContrasena").classList.add("oculto");
   document.getElementById("cintaCumpleanosSistema").classList.remove("visible");
-  document.getElementById("botonAdministrarUsuarios").classList.add("oculto");
   document.getElementById("botonResumenNino").classList.add("oculto");
   document.getElementById("botonResumenClase").classList.add("oculto");
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "asistencias-redencion-v3";
+const CACHE_NAME = "asistencias-redencion-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
