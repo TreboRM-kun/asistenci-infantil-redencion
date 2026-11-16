@@ -1606,9 +1606,7 @@ let anuncios = JSON.parse(
   localStorage.getItem("anunciosInfantilRedencion")
 ) || [];
 
-let datosNinos = JSON.parse(
-  localStorage.getItem("datosNinosRedencion")
-) || {};
+let datosNinos = {};
 
 function claveNino(salon, nombre) {
   return `${salon}::${nombre}`;
@@ -1717,12 +1715,12 @@ function actualizarEstadoNino(salon, nombre) {
     datos.ultimoDomingoEstado !== ultimoDomingoAnterior;
 }
 
-function actualizarEstadosNinos(salon) {
+function actualizarEstadosNinos(salon, guardarLocalmente = true) {
   let cambiaronDatos = false;
   ninos[salon].forEach(nombre => {
     cambiaronDatos = actualizarEstadoNino(salon, nombre) || cambiaronDatos;
   });
-  guardarDatosNinos();
+  if (guardarLocalmente) guardarDatosNinos();
   return cambiaronDatos;
 }
 
@@ -1824,36 +1822,14 @@ function filasDeNinos() {
   );
 }
 
-async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva = () => true) {
+async function cargarDatosDesdeAPI(sesionActiva = () => true) {
   try {
-    const pendientes = new Set([
-      "niños",
-      "asistencias",
-      "maestros",
-      "anuncios"
-    ]);
-    const leerConProgreso = async (nombreHoja, etiqueta) => {
-      const resultado = await leerHoja(nombreHoja);
-      pendientes.delete(etiqueta);
-      if (sesionActiva()) {
-        actualizarProgreso(
-          `Descarga de datos: ${4 - pendientes.size}/4 listas; faltan ${[...pendientes].join(", ") || "ninguna"}.`
-        );
-      }
-      return resultado;
-    };
-
-    if (sesionActiva()) {
-      actualizarProgreso(
-        "Descargando asistencias, niños, maestros y anuncios. Puede tardar mientras se cargan fotos y archivos."
-      );
-    }
     const [filasNinos, filasAsistencias, filasMaestros, filasAnuncios] =
       await Promise.all([
-        leerConProgreso(HOJAS.ninos, "niños"),
-        leerConProgreso(HOJAS.asistencias, "asistencias"),
-        leerConProgreso(HOJAS.maestros, "maestros"),
-        leerConProgreso(HOJAS.anuncios, "anuncios")
+        leerHoja(HOJAS.ninos),
+        leerHoja(HOJAS.asistencias),
+        leerHoja(HOJAS.maestros),
+        leerHoja(HOJAS.anuncios)
       ]);
 
     if (!sesionActiva()) {
@@ -1890,29 +1866,14 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
           };
         }
       });
-      guardarDatosNinos();
-      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
     } else {
       sincronizarHoja(HOJAS.ninos, filasDeNinos());
     }
 
     if (filasAsistencias.length) {
       asistencias = filasAsistencias;
-      localStorage.setItem(
-        "asistenciasRedencion",
-        JSON.stringify(asistencias)
-      );
     }
-    const estadosActualizados = Object.keys(ninos).reduce(
-      (cambiaron, salon) => actualizarEstadosNinos(salon) || cambiaron,
-      false
-    );
-    if (estadosActualizados) {
-      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
-      if (usuarioActual.rol !== "Supervisor") {
-        sincronizarHoja(HOJAS.ninos, filasDeNinos());
-      }
-    }
+    Object.keys(ninos).forEach(salon => actualizarEstadosNinos(salon, false));
 
     if (filasMaestros.length) {
       maestrosSalon = { Semillas: "", Plantas: "", Arboles: "" };
@@ -1943,22 +1904,8 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
 
     localStorage.removeItem("usuariosRedencion");
 
-    let ninosIniciales = {
-      Semillas: ["Ana López", "Carlos Pérez", "María Gómez"],
-      Plantas: ["David Torres", "Sofía Ramírez", "Juan Díaz"],
-      Arboles: ["Luis Martínez", "Elena Vargas", "Mateo Castillo"]
-    };
-
-    let ninos = JSON.parse(localStorage.getItem("ninosRedencion"));
-
-    if (!ninos) {
-      ninos = ninosIniciales;
-      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
-    }
-
-    let asistencias = JSON.parse(
-      localStorage.getItem("asistenciasRedencion")
-    ) || [];
+    let ninos = { Semillas: [], Plantas: [], Arboles: [] };
+    let asistencias = [];
 
     let usuarioActual = null;
     let instalacionPendiente = null;
@@ -2198,7 +2145,7 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
       }
 
       boton.disabled = true;
-      mensaje.textContent = "Verificando acceso seguro...";
+      mensaje.textContent = "Iniciando sesión...";
 
       try {
         const firebase = await window.firebaseReady;
@@ -2210,7 +2157,6 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
           ),
           "autenticación"
         );
-        mensaje.textContent = "Acceso validado; verificando perfil...";
         const resultadoPerfil = await esperarConLimite(
           firebase.get(
             firebase.ref(firebase.database, `Perfiles/${credencial.user.uid}`)
@@ -2243,10 +2189,8 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
           rol: perfil.rol,
           salon: perfil.salon
         };
-        mensaje.textContent = "Perfil validado; cargando asistencias...";
         await esperarConLimite(
           cargarDatosDesdeAPI(
-            texto => { mensaje.textContent = texto; },
             () => usuarioActual?.uid === credencial.user.uid
           ),
           "datos",
@@ -2372,10 +2316,6 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
       if (!usuarioActual || !ninos[salon]) return;
 
       ordenarNinos(salon);
-      localStorage.setItem("ninosRedencion", JSON.stringify(ninos));
-      if (usuarioActual.rol !== "Supervisor") {
-        sincronizarHoja(HOJAS.ninos, filasDeNinos());
-      }
 
       const puedeModificar =
         usuarioActual.rol === "Maestro" ||
@@ -2645,11 +2585,6 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
         String(fila.Fecha) !== fecha || String(fila.Salon) !== salon
       );
       asistencias.push(...filasAsistencia);
-      localStorage.setItem(
-        "asistenciasRedencion",
-        JSON.stringify(asistencias)
-      );
-
       const sincronizada = await sincronizarAsistencias(
         fecha,
         salon,
@@ -2662,7 +2597,7 @@ async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva =
       mostrarExito(
         sincronizada
           ? "Asistencia guardada correctamente."
-          : "Asistencia guardada en este navegador, pero no se pudo sincronizar en línea."
+          : "No se pudo sincronizar. La asistencia queda solo en esta pantalla; revise la conexión y vuelva a guardar antes de salir."
       );
     }
 
