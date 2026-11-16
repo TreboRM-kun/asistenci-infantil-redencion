@@ -1824,15 +1824,37 @@ function filasDeNinos() {
   );
 }
 
-async function cargarDatosDesdeAPI() {
+async function cargarDatosDesdeAPI(actualizarProgreso = () => {}, sesionActiva = () => true) {
   try {
+    const pendientes = new Set([
+      "niños",
+      "asistencias",
+      "maestros",
+      "anuncios"
+    ]);
+    const leerConProgreso = async (nombreHoja, etiqueta) => {
+      const resultado = await leerHoja(nombreHoja);
+      pendientes.delete(etiqueta);
+      actualizarProgreso(
+        `Descarga de datos: ${4 - pendientes.size}/4 listas; faltan ${[...pendientes].join(", ") || "ninguna"}.`
+      );
+      return resultado;
+    };
+
+    actualizarProgreso(
+      "Descargando asistencias, niños, maestros y anuncios. Puede tardar mientras se cargan fotos y archivos."
+    );
     const [filasNinos, filasAsistencias, filasMaestros, filasAnuncios] =
       await Promise.all([
-        leerHoja(HOJAS.ninos),
-        leerHoja(HOJAS.asistencias),
-        leerHoja(HOJAS.maestros),
-        leerHoja(HOJAS.anuncios)
+        leerConProgreso(HOJAS.ninos, "niños"),
+        leerConProgreso(HOJAS.asistencias, "asistencias"),
+        leerConProgreso(HOJAS.maestros, "maestros"),
+        leerConProgreso(HOJAS.anuncios, "anuncios")
       ]);
+
+    if (!sesionActiva()) {
+      throw new Error("La sesión de inicio ya no está activa.");
+    }
 
     if (filasAnuncios.length) {
       anuncios = filasAnuncios;
@@ -2218,7 +2240,14 @@ async function cargarDatosDesdeAPI() {
           salon: perfil.salon
         };
         mensaje.textContent = "Perfil validado; cargando asistencias...";
-        await esperarConLimite(cargarDatosDesdeAPI(), "datos");
+        await esperarConLimite(
+          cargarDatosDesdeAPI(
+            texto => { mensaje.textContent = texto; },
+            () => usuarioActual?.uid === credencial.user.uid
+          ),
+          "datos",
+          120000
+        );
 
         mensaje.textContent = "";
         document.getElementById("pantallaLogin").classList.add("oculto");
@@ -2271,7 +2300,7 @@ async function cargarDatosDesdeAPI() {
             : error.message.endsWith(":perfil")
               ? "El acceso se validó, pero no se pudo verificar el perfil. Contacte al administrador."
               : error.message.endsWith(":datos")
-                ? "El perfil se validó, pero la carga de asistencias tardó demasiado. Revise la conexión e intente de nuevo."
+                ? "La descarga de datos (incluidas fotos y archivos) tardó más de 2 minutos. Revise la conexión e intente de nuevo."
                 : "La conexión tardó demasiado. Intente de nuevo.";
         } else if (error?.code?.startsWith("auth/")) {
           mensaje.textContent = "Usuario o contraseña incorrectos.";
