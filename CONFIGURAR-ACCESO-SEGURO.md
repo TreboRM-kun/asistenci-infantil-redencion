@@ -6,7 +6,7 @@
 - Las seis cuentas y sus perfiles están creados en Firebase.
 - Las reglas de Realtime Database ya requieren autenticación y perfil para leer; las escrituras se limitan según el rol.
 - La rama `Usuarios`, que guardaba contraseñas antiguas, fue eliminada después de conservar los respaldos locales.
-- La app y el service worker están publicados en GitHub Pages. Durante el inicio de sesión, la app informa el progreso de descarga de las cuatro ramas y permite hasta dos minutos para cargar los datos y archivos multimedia.
+- La app y el service worker v7 están publicados en GitHub Pages. Durante el inicio de sesión, la app informa el progreso de descarga de las cuatro ramas y permite hasta dos minutos para cargar los datos y archivos multimedia.
 - El proyecto continúa en el plan gratuito Spark; no se activó Blaze.
 
 ## Cuentas
