@@ -2656,10 +2656,11 @@ function cumpleanosEstaSemana(fechaTexto) {
   const [mes, dia] = fechaTexto.split("-").map(Number);
   const hoy = new Date();
   const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  inicio.setDate(inicio.getDate() - ((inicio.getDay() + 6) % 7));
   const fin = new Date(inicio);
-  fin.setDate(fin.getDate() + 7);
-  const fecha = new Date(hoy.getFullYear(), mes - 1, dia);
-  if (fecha < inicio) fecha.setFullYear(hoy.getFullYear() + 1);
+  fin.setDate(fin.getDate() + 6);
+  const fecha = new Date(inicio.getFullYear(), mes - 1, dia);
+  if (fecha < inicio) fecha.setFullYear(fecha.getFullYear() + 1);
   return fecha >= inicio && fecha <= fin;
 }
 
