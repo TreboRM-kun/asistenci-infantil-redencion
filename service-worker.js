@@ -1,7 +1,10 @@
-const CACHE_NAME = "asistencias-redencion-v8";
+const CACHE_NAME = "asistencias-redencion-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./app.js",
+  "./app.legacy.js",
+  "./legacy-polyfills.js",
   "./manifest.webmanifest",
   "./src/img/lg.png",
   "./src/img/lg1.png",

@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "build:legacy": "node scripts/build-legacy.cjs",
+    "test:legacy": "node scripts/test-legacy.cjs"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "acorn": "^8.19.0",
+    "core-js-bundle": "^3.51.0",
+    "regenerator-runtime": "^0.14.1",
+    "whatwg-fetch": "^3.6.20"
+  }
+}
